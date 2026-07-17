@@ -1,0 +1,1 @@
+npx --prefix apps/web lint-staged

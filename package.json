@@ -1,0 +1,17 @@
+{
+  "name": "arenaos-ai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "web:dev": "npm run dev --prefix apps/web",
+    "web:build": "npm run build --prefix apps/web",
+    "web:lint": "npm run lint --prefix apps/web",
+    "format:check": "prettier --check \"**/*.{js,ts,tsx,css,md,json}\"",
+    "format:write": "prettier --write \"**/*.{js,ts,tsx,css,md,json}\"",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "prettier": "^3.5.1"
+  }
+}
