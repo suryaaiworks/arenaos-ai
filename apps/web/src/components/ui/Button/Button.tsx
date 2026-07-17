@@ -29,16 +29,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyle =
-      "inline-flex items-center justify-center font-semibold tracking-wide rounded-full transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none cursor-pointer text-center select-none active:scale-[0.98] outline-none";
+      "inline-flex items-center justify-center font-semibold tracking-wide rounded-full transition-all duration-180 disabled:opacity-50 disabled:pointer-events-none cursor-pointer text-center select-none active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-arena-primary focus-visible:ring-offset-2";
 
     const variantClasses = {
       primary:
         "bg-gradient-to-r from-arena-primary to-arena-secondary text-white hover:brightness-110 hover:shadow-[0_0_25px_rgba(79,124,255,0.35)] shadow-md shadow-arena-primary/10",
       secondary:
-        "bg-arena-surface border border-arena-border text-white hover:bg-arena-card hover:border-arena-primary/30",
+        "bg-arena-surface border border-arena-border text-arena-text hover:bg-arena-card hover:border-arena-primary/30",
       outline:
         "bg-transparent border border-arena-primary/40 text-arena-primary hover:bg-arena-primary/10",
-      ghost: "bg-transparent text-arena-muted hover:text-white hover:bg-white/5",
+      ghost: "bg-transparent text-arena-muted hover:text-arena-text hover:bg-arena-hover",
       destructive:
         "bg-arena-danger text-white hover:bg-arena-danger/90 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] shadow-md shadow-arena-danger/10",
     };

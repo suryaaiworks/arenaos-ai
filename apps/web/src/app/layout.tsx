@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/features/app/providers/ThemeProvider";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
@@ -106,7 +107,10 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <div className="flex-grow flex flex-col w-full relative z-10">{children}</div>
+        {/* ThemeProvider wraps all routes — theme persists via localStorage */}
+        <ThemeProvider>
+          <div className="flex-grow flex flex-col w-full relative z-10">{children}</div>
+        </ThemeProvider>
       </body>
     </html>
   );

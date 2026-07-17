@@ -5,6 +5,8 @@ import Breadcrumb from "../Breadcrumb";
 import CommandPaletteButton from "../CommandPaletteButton";
 import NotificationBell from "../NotificationBell";
 import ProfileMenu from "../ProfileMenu";
+import RoleSwitcher from "../RoleSwitcher";
+import ThemeSwitcher from "../ThemeSwitcher";
 
 /**
  * Reusable Header Layout bar.
@@ -18,7 +20,9 @@ export function Header({
   return (
     <header
       className={cn(
-        "h-16 shrink-0 bg-arena-bg/85 border-b border-white/5 px-6 flex items-center justify-between backdrop-blur-md relative z-20 select-none",
+        "h-16 shrink-0 px-6 flex items-center justify-between backdrop-blur-md relative z-20 select-none",
+        // Background and border respond to data-theme via CSS vars
+        "bg-[var(--arena-header-bg,rgba(5,8,22,0.92))] border-b border-[var(--arena-header-border,rgba(255,255,255,0.06))]",
         className
       )}
       data-testid={dataTestId}
@@ -32,6 +36,8 @@ export function Header({
       {/* Control Widgets list */}
       <div className="flex items-center space-x-4">
         <CommandPaletteButton />
+        <RoleSwitcher />
+        <ThemeSwitcher />
         <NotificationBell />
         <ProfileMenu />
       </div>

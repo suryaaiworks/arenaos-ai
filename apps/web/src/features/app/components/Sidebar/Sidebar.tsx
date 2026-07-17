@@ -3,7 +3,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { SidebarProps, SidebarItemProps } from "./Sidebar.types";
-import { NAVIGATION_ITEMS } from "../../navigation/navigation.data";
+import { NAVIGATION_ITEMS, ROLE_NAVIGATION_ITEMS } from "../../navigation/navigation.data";
+import { useRole } from "../../providers/RoleProvider";
 
 /**
  * Custom vector icon parser for sidebar navigator categories.
@@ -60,17 +61,68 @@ function NavIcon({ name }: { name: string }) {
       </svg>
     );
   }
-  if (name === "transport") {
+  if (name === "ticket") {
     return (
       <svg className={iconBaseClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
       </svg>
     );
   }
-  if (name === "analytics") {
+  if (name === "seat") {
     return (
       <svg className={iconBaseClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 5h14l1 12H4L5 5zm0 12h14v2H5v-2z" />
+      </svg>
+    );
+  }
+  if (name === "food") {
+    return (
+      <svg className={iconBaseClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      </svg>
+    );
+  }
+  if (name === "restricted") {
+    return (
+      <svg className={iconBaseClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    );
+  }
+  if (name === "parking") {
+    return (
+      <svg className={iconBaseClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 16h3a3 3 0 100-6H9v6zm0 0v2" />
+        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+      </svg>
+    );
+  }
+  if (name === "metro") {
+    return (
+      <svg className={iconBaseClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    );
+  }
+  if (name === "revenue") {
+    return (
+      <svg className={iconBaseClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    );
+  }
+  if (name === "utilities") {
+    return (
+      <svg className={iconBaseClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    );
+  }
+  if (name === "maintenance") {
+    return (
+      <svg className={iconBaseClass} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" />
       </svg>
     );
   }
@@ -99,7 +151,7 @@ export function SidebarItem({
         "w-full flex items-center px-4 py-3 text-xs font-semibold rounded-xl transition-all duration-200 outline-none select-none cursor-pointer focus-visible:outline-arena-primary",
         active
           ? "bg-arena-primary text-white shadow-md shadow-arena-primary/20"
-          : "bg-transparent text-arena-muted hover:text-white hover:bg-white/5",
+          : "bg-transparent text-[var(--arena-text-muted,#94a3b8)] hover:text-[var(--arena-text-primary,#fff)] hover:bg-[var(--arena-hover-bg,rgba(255,255,255,0.05))]",
         collapsed ? "justify-center" : "justify-start space-x-3.5",
         className
       )}
@@ -127,10 +179,14 @@ export function Sidebar({
   "data-testid": dataTestId = "sidebar",
   ...props
 }: SidebarProps) {
+  const { role } = useRole();
+  const roleItems = items === NAVIGATION_ITEMS ? (ROLE_NAVIGATION_ITEMS[role] || items) : items;
   return (
     <aside
       className={cn(
-        "h-screen shrink-0 bg-arena-bg border-r border-white/5 flex flex-col justify-between py-6 px-4 transition-all duration-300 relative z-30 select-none",
+        "h-screen shrink-0 flex flex-col justify-between py-6 px-4 transition-all duration-300 relative z-30 select-none",
+        // Theme-aware: --arena-sidebar-bg and --arena-sidebar-border respond to data-theme
+        "bg-[var(--arena-sidebar-bg,#050816)] border-r border-[var(--arena-sidebar-border,rgba(255,255,255,0.06))]",
         collapsed ? "w-20" : "w-64",
         className
       )}
@@ -141,12 +197,12 @@ export function Sidebar({
         {/* Sidebar Brand header logo */}
         <div 
           className={cn(
-            "flex items-center pb-2 border-b border-white/5", 
+            "flex items-center pb-2 border-b border-[var(--arena-divider,rgba(255,255,255,0.06))]", 
             collapsed ? "justify-center" : "justify-between px-2"
           )}
         >
           {!collapsed ? (
-            <span className="text-sm font-bold tracking-widest text-white uppercase">
+            <span className="text-sm font-bold tracking-widest text-[var(--arena-text-primary,#fff)] uppercase">
               ArenaOS <span className="text-arena-primary animate-pulse">AI</span>
             </span>
           ) : (
@@ -175,7 +231,7 @@ export function Sidebar({
 
         {/* Sidebar dynamic links list */}
         <nav className="flex flex-col space-y-1.5 overflow-y-auto max-h-[calc(100vh-200px)]">
-          {items.map((item) => (
+          {roleItems.map((item) => (
             <SidebarItem
               key={item.label}
               item={item}
@@ -192,7 +248,7 @@ export function Sidebar({
       {/* Footer system details banner */}
       {!collapsed && (
         <div 
-          className="px-2 pt-4 border-t border-white/5 text-[10px] text-arena-muted/40 font-mono text-center"
+          className="px-2 pt-4 border-t border-[var(--arena-divider,rgba(255,255,255,0.06))] text-[10px] text-[var(--arena-text-muted,#94a3b8)]/40 font-mono text-center"
           aria-hidden="true"
         >
           <span>CONSOLE SYSTEM ACTIVE</span>

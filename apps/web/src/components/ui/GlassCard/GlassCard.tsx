@@ -4,6 +4,7 @@ import { GlassCardProps } from "./GlassCard.types";
 
 /**
  * Reusable Glassmorphism Card panel.
+ * Theme-aware: respects CSS variable system for both dark and light modes.
  * All sizes and visual tokens are mapped to design variables in globals.css.
  */
 export function GlassCard({
@@ -44,13 +45,16 @@ export function GlassCard({
   return (
     <div
       className={cn(
+        // Base theme-aware background using CSS var
+        "arena-card",
         variantClasses[variant],
         roundedClasses[rounded],
         paddingClasses[padding],
         blur && "backdrop-blur-md",
-        border && "border border-white/5",
+        // Use CSS var for border: visually distinct on both themes
+        border && "border border-[rgba(255,255,255,0.07)] dark:border-[rgba(255,255,255,0.07)] [html[data-theme=light]_&]:border-[rgba(30,41,59,0.10)]",
         glow && "animate-glow",
-        hover && "glass-effect-hover",
+        hover && "glass-effect-hover transition-shadow hover:shadow-lg",
         interactive && "active:scale-[0.99] transition-transform cursor-pointer select-none",
         "relative overflow-hidden transition-all duration-300",
         className

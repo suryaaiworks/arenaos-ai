@@ -44,8 +44,8 @@ export const HERO_REDESIGN_DATA: HeroRedesignData = {
   title: "ArenaOS AI",
   subtitle: "The Agentic AI Operating System for Smart Stadiums",
   description: "Orchestrate stadium events, optimize crowd routing, and automate safety dispatches in real-time through a collaborative network of autonomous Google AI agents.",
-  primaryCta: { label: "Initialize Console", href: "#contact" },
-  secondaryCta: { label: "Read Architecture", href: "#architecture" },
+  primaryCta: { label: "Launch Operations Console", href: "/app" },
+  secondaryCta: { label: "Open Fan Companion", href: "/fan" },
   cards: {
     crowd: {
       title: "Crowd Intelligence",

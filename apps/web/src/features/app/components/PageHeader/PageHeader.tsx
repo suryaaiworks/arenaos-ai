@@ -17,7 +17,7 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-white/5 select-none", 
+        "flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-[var(--arena-divider,rgba(255,255,255,0.06))] select-none", 
         className
       )}
       data-testid={dataTestId}
@@ -25,11 +25,11 @@ export function PageHeader({
     >
       {/* Title descriptors */}
       <div className="flex flex-col space-y-1 text-left">
-        <h1 className="text-lg md:text-xl font-bold tracking-tight text-white">
+        <h1 className="text-lg md:text-xl font-bold tracking-tight text-[var(--arena-text-primary,#fff)]">
           {title}
         </h1>
         {description && (
-          <p className="text-xs text-arena-muted leading-relaxed">
+          <p className="text-xs text-[var(--arena-text-muted,#94a3b8)] leading-relaxed">
             {description}
           </p>
         )}

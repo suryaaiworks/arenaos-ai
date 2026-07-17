@@ -23,7 +23,9 @@ export function AppShell({
   return (
     <div
       className={cn(
-        "h-screen w-screen flex bg-arena-bg overflow-hidden relative font-sans text-arena-text", 
+        "h-screen w-screen flex overflow-hidden relative font-sans",
+        // Theme-aware background and text colors via CSS vars
+        "bg-[var(--arena-bg,#050816)] text-[var(--arena-text-primary,#fff)]",
         className
       )}
       data-testid={dataTestId}

@@ -23,7 +23,7 @@ export const NAVBAR_DATA: NavbarData = {
     { label: "Contact", href: "#contact" },
   ],
   actions: [
-    { label: "GitHub", href: "https://github.com", variant: "outline" },
-    { label: "Get Started", href: "#contact", variant: "primary" },
+    { label: "Operations Console", href: "/app", variant: "outline" },
+    { label: "Fan Companion", href: "/fan", variant: "primary" },
   ],
 };
