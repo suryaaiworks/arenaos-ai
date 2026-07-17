@@ -1,40 +1,57 @@
 import React from "react";
-import { SYSTEM_CONFIG } from "@/constants";
+import { GradientBackground, NoiseTexture, PageTransition } from "@/components/shared";
+import {
+  AnnouncementBanner,
+  NavbarContainer,
+  HeroSection,
+  TrustedTechSection,
+  ProblemSection,
+  SolutionSection,
+  AgentPreviewSection,
+  FeaturesSection,
+  ArchitectureSection,
+  BenefitsSection,
+  TechStackSection,
+  CtaSection,
+  FooterContainer,
+} from "@/features/landing/components";
 
 /**
- * Foundational Root Page for ArenaOS AI (Sprint 1.1).
- * Rendered as a React Server Component (no client scripts) to serve as a clean placeholder.
+ * Root Landing Page for ArenaOS AI (Sprint 1.3).
+ * Renders as a pure React Server Component (no client-side logic on page wrapper),
+ * composting our 13 modular data-driven landing sections.
  */
 export default function Home() {
   return (
-    <main
-      id="main-content"
-      className="flex-grow flex flex-col items-center justify-center p-6 text-center min-h-screen bg-arena-bg"
-    >
-      <div className="max-w-xl mx-auto space-y-6">
-        {/* Foundation active indicator */}
-        <div className="inline-flex items-center space-x-2 bg-arena-surface border border-arena-border rounded-full px-4 py-1.5 shadow-lg">
-          <span
-            className="w-2 h-2 rounded-full bg-arena-primary animate-pulse"
-            aria-hidden="true"
-          />
-          <span className="text-[10px] md:text-xs font-semibold uppercase tracking-widest text-arena-primary">
-            Sprint 1.1 Foundation Active
-          </span>
+    <GradientBackground>
+      {/* Subtle OS-style static grain overlay */}
+      <NoiseTexture opacity={0.015} />
+
+      {/* Dynamic fade route page transition */}
+      <PageTransition preset="fade">
+        {/* Navigation block */}
+        <div className="flex flex-col w-full z-50">
+          <AnnouncementBanner />
+          <NavbarContainer />
         </div>
 
-        {/* Brand Header */}
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white select-none">
-          {SYSTEM_CONFIG.appName}
-        </h1>
+        {/* Vertical stacking layout sections */}
+        <div className="flex flex-col flex-grow w-full relative z-10">
+          <HeroSection />
+          <TrustedTechSection />
+          <ProblemSection />
+          <SolutionSection />
+          <AgentPreviewSection />
+          <FeaturesSection />
+          <ArchitectureSection />
+          <BenefitsSection />
+          <TechStackSection />
+          <CtaSection />
+        </div>
 
-        {/* Description */}
-        <p className="text-xs md:text-sm text-arena-muted max-w-md mx-auto leading-relaxed">
-          The Agentic AI Operating System for Smart Stadiums. Project directory architecture,
-          Tailwind CSS design tokens, absolute paths, and pre-commit Git hooks are fully configured
-          and ready for future sprints.
-        </p>
-      </div>
-    </main>
+        {/* Footer block */}
+        <FooterContainer />
+      </PageTransition>
+    </GradientBackground>
   );
 }

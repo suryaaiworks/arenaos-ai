@@ -14,6 +14,12 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+export const viewport = {
+  themeColor: "#050816",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "ArenaOS AI – The Agentic AI Operating System for Smart Stadiums",
   description:
@@ -26,7 +32,27 @@ export const metadata: Metadata = {
     "Gemini AI",
     "FIFA World Cup",
     "Crowd Intelligence",
+    "Stadium Operations",
   ],
+  metadataBase: new URL("https://arenaos.ai"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://arenaos.ai",
+    title: "ArenaOS AI – The Agentic AI Operating System for Smart Stadiums",
+    description:
+      "An intelligent multi-agent AI command platform designed for crowd management, real-time security coordination, and operations optimization.",
+    siteName: "ArenaOS AI",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ArenaOS AI – The Agentic AI Operating System for Smart Stadiums",
+    description:
+      "An intelligent multi-agent AI command platform designed for crowd management, real-time security coordination, and operations optimization.",
+  },
 };
 
 export default function RootLayout({
