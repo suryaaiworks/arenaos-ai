@@ -13,6 +13,9 @@ export interface OrchestratorConsoleData {
   telemetryState: string;
   requestsPerSec: number;
   statusText: string;
+  cpuLoad: string;
+  memoryUsage: string;
+  currentEvent: string;
 }
 
 export interface HeroRedesignData {
@@ -29,12 +32,15 @@ export interface HeroRedesignData {
     transport: TelemetryCardData;
     operations: TelemetryCardData;
     weather: TelemetryCardData;
+    food: TelemetryCardData;
+    assistant: TelemetryCardData;
+    match: TelemetryCardData;
   };
   orchestrator: OrchestratorConsoleData;
 }
 
 export const HERO_REDESIGN_DATA: HeroRedesignData = {
-  badge: "Agentic OS v1.0",
+  badge: "Product Preview OS v1.0",
   title: "ArenaOS AI",
   subtitle: "The Agentic AI Operating System for Smart Stadiums",
   description: "Orchestrate stadium events, optimize crowd routing, and automate safety dispatches in real-time through a collaborative network of autonomous Google AI agents.",
@@ -43,45 +49,66 @@ export const HERO_REDESIGN_DATA: HeroRedesignData = {
   cards: {
     crowd: {
       title: "Crowd Intelligence",
-      value: "Moderate Influx",
-      detail: "Sectors A-D balanced",
-      status: "success",
-      metric: "72% load",
+      value: "Live Occupancy: 82%",
+      detail: "Gate A congestion: High",
+      status: "warning",
+      metric: "58,402 in seats",
     },
     emergency: {
-      title: "Emergency AI",
-      value: "Clear Status",
-      detail: "No active hazard alerts",
+      title: "Emergency Center",
+      value: "Alert Status: Clear",
+      detail: "Medical Team: Standby",
       status: "success",
-      metric: "0 alarms",
+      metric: "0 hazard triggers",
     },
     navigation: {
-      title: "Navigation AI",
+      title: "Smart Navigation",
       value: "Best Route: Gate B",
-      detail: "Turnstile delays resolved",
+      detail: "Current Gate: Optimizing",
       status: "info",
-      metric: "120s queue",
+      metric: "120s turnstile",
     },
     transport: {
-      title: "Transport AI",
-      value: "Smooth Transit",
-      detail: "Buses routed to exit 4",
+      title: "Transportation",
+      value: "Metro Link: 2m wait",
+      detail: "Parking: 88% capacity",
       status: "info",
-      metric: "4.8m interval",
+      metric: "Ride Share loop normal",
     },
     operations: {
-      title: "Operations AI",
-      value: "All Systems Active",
-      detail: "Concessions stock green",
+      title: "Operations Center",
+      value: "System Health: 99.9%",
+      detail: "Power: Active, Staff: deployed",
       status: "success",
-      metric: "99.9% uptime",
+      metric: "Fans & Cooling: normal",
     },
     weather: {
-      title: "Weather Status",
-      value: "28°C / Cloudy",
-      detail: "Humidity 55% normal",
-      status: "warning",
-      metric: "10% rain prob",
+      title: "Weather Intelligence",
+      value: "Temp: 28°C / Dry",
+      detail: "Rain Risk: 10%, Wind: 8km/h",
+      status: "success",
+      metric: "Pitch moisture: 78%",
+    },
+    food: {
+      title: "Food & Shops",
+      value: "Vendors: 92% active",
+      detail: "Queue Time: 3m avg",
+      status: "success",
+      metric: "Digital payments online",
+    },
+    assistant: {
+      title: "AI Assistant",
+      value: "Voice link active",
+      detail: "Listening for telemetry queries",
+      status: "info",
+      metric: "Ready to coordinate",
+    },
+    match: {
+      title: "Match Center",
+      value: "Live: ARS 2 - 1 CHE",
+      detail: "Kickoff Timer: 74:20",
+      status: "success",
+      metric: "Spectator volume: peak",
     },
   },
   orchestrator: {
@@ -91,5 +118,8 @@ export const HERO_REDESIGN_DATA: HeroRedesignData = {
     telemetryState: "Optimal",
     requestsPerSec: 1452,
     statusText: "ONLINE",
+    cpuLoad: "14.5%",
+    memoryUsage: "2.4 GB / 16 GB",
+    currentEvent: "London Derby (Live)",
   },
 };
