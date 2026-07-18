@@ -105,6 +105,9 @@ export function ScenarioProvider({ children }: ScenarioProviderProps) {
     } else if (newScenario === "stock_shortage") {
       scenarioName = "Lost Child";
       prompt = "A lost child reported near retail sector.";
+    } else if (newScenario === "metro_failure") {
+      scenarioName = "Bomb Threat";
+      prompt = "Suspicious package reported near Gate A.";
     }
 
     try {

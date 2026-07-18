@@ -8,6 +8,7 @@ import { useRole } from "@/features/app/providers/RoleProvider";
 import { useScenario } from "@/features/app/providers/ScenarioProvider";
 import { ScenarioId } from "@/features/app/providers/ScenarioProvider/ScenarioProvider.types";
 import { useToast } from "@/features/app/providers/ToastProvider";
+import { useEventStream } from "@/hooks/useEventStream";
 import {
   StatusCard,
   RecommendationCard,
@@ -26,13 +27,13 @@ import {
 
 const SCENARIO_LABELS: Record<ScenarioId, string> = {
   clear: "Clear Operations",
-  gate_congestion: "Heavy Ingress Congestion",
-  medical_sos: "Medical SOS Alert",
+  gate_congestion: "Crowd Surge",
+  medical_sos: "VIP Medical Emergency",
   parking_full: "Parking Lot Full",
-  security_threat: "Restricted Zone Breach",
-  weather_delay: "Lightning cells warning",
-  metro_failure: "Metro Line Delays",
-  stock_shortage: "Inventory refills",
+  security_threat: "Gate Breach",
+  weather_delay: "Fire in Food Court",
+  metro_failure: "Bomb Threat",
+  stock_shortage: "Lost Child",
 };
 
 /**
@@ -43,6 +44,7 @@ export default function AppPage() {
   const { role } = useRole();
   const { activeScenario, setScenario, scenarioDetails, setSelectedObject, simulationResult } = useScenario();
   const { addToast } = useToast();
+  const { eventHistory } = useEventStream(["*"]);
 
   const handleSelectScenario = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setScenario(e.target.value as ScenarioId);
@@ -133,7 +135,27 @@ export default function AppPage() {
             AI Operations logs
           </span>
 
-          {activeScenario === "clear" && (
+          {/* Real-time WebSocket/SSE Event log */}
+          <div className="p-4 rounded-xl border border-white/5 bg-arena-surface/30 space-y-2 text-left">
+            <span className="text-[9px] uppercase font-bold text-arena-primary font-mono block tracking-wider">
+              REAL-TIME EVENTS FEED (WebSocket)
+            </span>
+            <div className="space-y-1.5 max-h-40 overflow-y-auto">
+              {eventHistory.length === 0 ? (
+                <p className="text-[10px] text-arena-muted italic">Waiting for broadcast feeds...</p>
+              ) : (
+                eventHistory.slice(0, 5).map((evt, idx) => (
+                  <div key={idx} className="border-b border-white/5 pb-1 last:border-0 text-[10px] leading-tight">
+                    <span className="text-arena-primary font-mono">[{new Date(evt.timestamp || Date.now()).toLocaleTimeString()}]</span>{" "}
+                    <span className="text-white font-semibold">{evt.event_type}</span>{" "}
+                    <span className="text-arena-muted">({evt.source})</span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {activeScenario === "clear" && eventHistory.length === 0 && (
             <div className="p-4 rounded-xl border border-white/5 bg-arena-surface/30 text-center text-xs text-arena-muted py-12 select-none">
               No active alerts. Platform telemetry optimal.
             </div>

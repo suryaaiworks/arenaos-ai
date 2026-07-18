@@ -6,6 +6,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import Badge from "@/components/ui/Badge";
 import Skeleton from "@/components/ui/Skeleton";
 import Button from "@/components/ui/Button";
+import { useEventStream } from "@/hooks/useEventStream";
 
 /**
  * Reusable Right-hand Utility Panel.
@@ -19,6 +20,7 @@ export function UtilityPanel({
 }: UtilityPanelProps) {
   const { selectedObject: contextSelectedObject, setSelectedObject } = useScenario();
   const activeSelectedObject = selectedObject !== undefined ? selectedObject : contextSelectedObject;
+  const { eventHistory } = useEventStream(["*"]);
 
   return (
     <aside
@@ -78,25 +80,29 @@ export function UtilityPanel({
           </div>
         </div>
       ) : (
-        /* Default Mock Telemetry logs stream */
+        /* Default live logs from WebSocket/SSE */
         <div className="space-y-4 text-left">
-          <GlassCard padding="sm" rounded="sm" border={true} hover={false} className="bg-arena-surface/40">
-            <span className="text-[9px] uppercase font-bold text-arena-primary tracking-wider block mb-1">
-              Gemini Orchestrator
-            </span>
-            <p className="text-[10px] text-white/80 leading-relaxed">
-              Orchestrating staff deployments at Exit Gate 3. Influx rate stabilizing at 350 / min.
-            </p>
-          </GlassCard>
-
-          <GlassCard padding="sm" rounded="sm" border={true} hover={false} className="bg-arena-surface/40">
-            <span className="text-[9px] uppercase font-bold text-arena-secondary tracking-wider block mb-1">
-              Crowd Agent
-            </span>
-            <p className="text-[10px] text-white/80 leading-relaxed">
-              Turnstile logs analyzed. Ingress lines balanced across Sectors A, B, and C.
-            </p>
-          </GlassCard>
+          {eventHistory.length === 0 ? (
+            <div className="text-center py-12 text-xs text-arena-muted italic">
+              Waiting for backend socket telemetry feeds...
+            </div>
+          ) : (
+            eventHistory.slice(0, 4).map((evt, idx) => (
+              <GlassCard key={idx} padding="sm" rounded="sm" border={true} hover={false} className="bg-arena-surface/40">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[9px] uppercase font-bold text-arena-primary tracking-wider">
+                    {evt.event_type}
+                  </span>
+                  <span className="text-[8px] font-mono text-arena-muted">
+                    {new Date(evt.timestamp || Date.now()).toLocaleTimeString()}
+                  </span>
+                </div>
+                <p className="text-[10px] text-white/80 leading-relaxed font-mono">
+                  Origin: {evt.source} | Priority: {evt.priority}
+                </p>
+              </GlassCard>
+            ))
+          )}
 
           {/* Loading indicators */}
           <div className="space-y-2 pt-2" aria-hidden="true">
