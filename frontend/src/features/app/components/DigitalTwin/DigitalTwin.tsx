@@ -258,7 +258,7 @@ export function DigitalTwin({
           }}
         >
           <div
-            className="relative w-80 h-80 flex items-center justify-center transition-all duration-300"
+            className="relative w-[450px] h-[450px] flex items-center justify-center transition-all duration-300"
             style={{
               transform: `rotateX(${pitch}deg) rotateY(0deg) rotateZ(${rotate}deg)`,
               transformStyle: "preserve-3d",
