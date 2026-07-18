@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { cn } from "@/lib/utils";
 import PageHeader from "@/features/app/components/PageHeader";
 import Button from "@/components/ui/Button";
 import GlassCard from "@/components/ui/GlassCard";
@@ -46,9 +47,18 @@ export default function AppPage() {
   const { addToast } = useToast();
   const { eventHistory } = useEventStream(["*"]);
 
-  const handleSelectScenario = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setScenario(e.target.value as ScenarioId);
-  };
+  const [scenarioDropdownOpen, setScenarioDropdownOpen] = useState(false);
+  const scenarioDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (scenarioDropdownRef.current && !scenarioDropdownRef.current.contains(e.target as Node)) {
+        setScenarioDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
 
   return (
     <div className="space-y-6 select-none pb-12">
@@ -57,21 +67,51 @@ export default function AppPage() {
         title={`Smart Stadium Command Hub`}
         description={`Active Perspective: ${role.toUpperCase()} Console. Select simulation events below to test platform intelligence.`}
         actionSlot={
-          <div className="flex items-center space-x-3 bg-arena-surface/40 p-2 rounded-xl border border-white/5">
-            <span className="text-[10px] font-mono text-arena-muted uppercase font-bold shrink-0">
-              SIMULATE EVENT:
-            </span>
-            <select
-              value={activeScenario}
-              onChange={handleSelectScenario}
-              className="bg-black/60 border border-white/10 rounded-lg text-xs font-semibold px-2 py-1 text-white focus:outline-none focus:border-arena-primary cursor-pointer"
+          <div ref={scenarioDropdownRef} className="relative inline-block text-left select-none z-30">
+            <button
+              onClick={() => setScenarioDropdownOpen(!scenarioDropdownOpen)}
+              className="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-white/5 bg-white/5 text-arena-muted hover:text-white hover:bg-white/10 hover:border-white/10 transition-all text-xs font-semibold cursor-pointer focus:outline-none focus-visible:outline-arena-primary"
             >
-              {(Object.keys(SCENARIO_LABELS) as ScenarioId[]).map((id) => (
-                <option key={id} value={id}>
-                  {SCENARIO_LABELS[id]}
-                </option>
-              ))}
-            </select>
+              <span className="text-[10px] font-mono text-arena-muted uppercase font-bold shrink-0">
+                SIMULATE EVENT:
+              </span>
+              <span className="text-white font-semibold">{SCENARIO_LABELS[activeScenario]}</span>
+              <svg className={cn("w-3 h-3 transition-transform", scenarioDropdownOpen && "rotate-180")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {scenarioDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-56 z-50 animate-fade-in">
+                <GlassCard 
+                  padding="sm" 
+                  rounded="sm" 
+                  border={true} 
+                  className="bg-arena-surface border border-white/10 shadow-2xl p-1 text-left flex flex-col space-y-0.5 max-h-80 overflow-y-auto"
+                >
+                  <span className="text-[9px] uppercase font-bold text-arena-muted tracking-wider px-3 py-1.5 block select-none border-b border-white/5">
+                    SELECT SCENARIO
+                  </span>
+                  {(Object.keys(SCENARIO_LABELS) as ScenarioId[]).map((id) => (
+                    <button
+                      key={id}
+                      onClick={() => {
+                        setScenario(id);
+                        setScenarioDropdownOpen(false);
+                      }}
+                      className={cn(
+                        "w-full text-left px-3 py-2 text-xs font-semibold rounded-lg transition-all focus:outline-none cursor-pointer",
+                        activeScenario === id
+                          ? "bg-arena-primary text-white"
+                          : "text-arena-muted hover:bg-white/5 hover:text-white"
+                      )}
+                    >
+                      {SCENARIO_LABELS[id]}
+                    </button>
+                  ))}
+                </GlassCard>
+              </div>
+            )}
           </div>
         }
       />
