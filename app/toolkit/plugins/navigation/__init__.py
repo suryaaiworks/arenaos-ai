@@ -1,0 +1,1 @@
+# Navigation Tool Initialization Hook

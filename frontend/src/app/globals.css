@@ -1,0 +1,361 @@
+@import "tailwindcss";
+
+@theme {
+  /* ============================================================
+     ARENA OS AI — Dynamic Design Tokens
+     ============================================================ */
+
+  /* Theme base colors mapped to dynamic CSS custom properties */
+  --color-arena-bg: var(--arena-bg);
+  --color-arena-surface: var(--arena-surface);
+  --color-arena-card: var(--arena-card-bg);
+  --color-arena-border: var(--arena-card-border);
+  --color-arena-primary: var(--arena-primary);
+  --color-arena-secondary: #7c5cff;
+  --color-arena-success: #22c55e;
+  --color-arena-warning: #f59e0b;
+  --color-arena-danger: #ef4444;
+  --color-arena-text: var(--arena-text-primary);
+  --color-arena-muted: var(--arena-text-muted);
+  --color-arena-hover: var(--arena-hover-bg);
+  --color-arena-active: var(--arena-active-bg);
+
+  /* Typography */
+  --font-sans: var(--font-plus-jakarta), var(--font-inter), sans-serif;
+
+  /* Border Radius */
+  --radius-arena-card: 20px;
+  --radius-arena-card-lg: 28px;
+
+  /* Spacing Tokens */
+  --spacing-arena-gap: 24px;
+  --spacing-arena-gap-lg: 32px;
+
+  /* Shadows & Glows */
+  --shadow-arena-glow: 0 0 20px rgba(79, 124, 255, 0.15);
+  --shadow-arena-glow-secondary: 0 0 20px rgba(124, 92, 255, 0.15);
+  --shadow-arena-card: var(--arena-card-shadow);
+}
+
+/* ============================================================
+   DARK THEME (default) — Premium FIFA Stadium Night Aesthetic
+   ============================================================ */
+:root,
+html[data-theme="dark"] {
+  --background: #050816;
+  --foreground: #ffffff;
+
+  --arena-bg: #050816;
+  --arena-surface: #0b0f24;
+  --arena-card-bg: rgba(15, 23, 42, 0.70);
+  --arena-card-border: rgba(255, 255, 255, 0.07);
+  --arena-card-shadow: 0 4px 24px rgba(0,0,0,0.40);
+  --arena-header-bg: rgba(5, 8, 22, 0.92);
+  --arena-header-border: rgba(255, 255, 255, 0.06);
+  --arena-ticker-bg: rgba(11, 15, 36, 0.92);
+  --arena-sidebar-bg: rgba(5, 8, 22, 1);
+  --arena-sidebar-border: rgba(255, 255, 255, 0.06);
+
+  --arena-text-primary: #ffffff;
+  --arena-text-secondary: rgba(255, 255, 255, 0.82);
+  --arena-text-body: rgba(255, 255, 255, 0.72);
+  --arena-text-muted: #94a3b8;
+  --arena-text-heading: #ffffff;
+
+  --arena-input-bg: rgba(0, 0, 0, 0.40);
+  --arena-input-border: rgba(255, 255, 255, 0.10);
+  --arena-input-text: #ffffff;
+  --arena-input-placeholder: #94a3b8;
+
+  --arena-primary: #4f7cff;
+  --arena-primary-hover: #3b6bff;
+  --arena-primary-glow: rgba(79, 124, 255, 0.20);
+
+  --arena-scrollbar-track: #050816;
+  --arena-scrollbar-thumb: #1e293b;
+  --arena-scrollbar-hover: #4f7cff;
+
+  --arena-selection-bg: rgba(79, 124, 255, 0.30);
+  --arena-selection-text: #ffffff;
+
+  --arena-divider: rgba(255, 255, 255, 0.06);
+  --arena-hover-bg: rgba(255, 255, 255, 0.04);
+  --arena-active-bg: rgba(79, 124, 255, 0.12);
+}
+
+/* ============================================================
+   LIGHT THEME — Premium FIFA Stadium Daylight Aesthetic
+   ============================================================ */
+html[data-theme="light"] {
+  --background: #f0f4ff;
+  --foreground: #0f172a;
+
+  --arena-bg: #eef2ff;
+  --arena-surface: #ffffff;
+  --arena-card-bg: #ffffff;
+  --arena-card-border: rgba(30, 41, 59, 0.10);
+  --arena-card-shadow: 0 2px 16px rgba(30,41,59,0.08);
+  --arena-header-bg: rgba(255, 255, 255, 0.95);
+  --arena-header-border: rgba(203, 213, 225, 0.70);
+  --arena-ticker-bg: rgba(238, 244, 255, 0.97);
+  --arena-sidebar-bg: #ffffff;
+  --arena-sidebar-border: rgba(203, 213, 225, 0.60);
+
+  --arena-text-primary: #0f172a;
+  --arena-text-secondary: #334155;
+  --arena-text-body: #475569;
+  --arena-text-muted: #64748b;
+  --arena-text-heading: #0f172a;
+
+  --arena-input-bg: #f8fafc;
+  --arena-input-border: #cbd5e1;
+  --arena-input-text: #0f172a;
+  --arena-input-placeholder: #94a3b8;
+
+  --arena-primary: #2563eb;
+  --arena-primary-hover: #1d4ed8;
+  --arena-primary-glow: rgba(37, 99, 235, 0.15);
+
+  --arena-scrollbar-track: #e2e8f0;
+  --arena-scrollbar-thumb: #94a3b8;
+  --arena-scrollbar-hover: #2563eb;
+
+  --arena-selection-bg: rgba(37, 99, 235, 0.18);
+  --arena-selection-text: #0f172a;
+
+  --arena-divider: rgba(30, 41, 59, 0.08);
+  --arena-hover-bg: rgba(30, 41, 59, 0.04);
+  --arena-active-bg: rgba(37, 99, 235, 0.08);
+}
+
+/* ============================================================
+   GLOBAL SMOOTH THEME TRANSITIONS
+   ============================================================ */
+html {
+  transition: background-color 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body,
+header,
+aside,
+nav,
+main,
+footer,
+section,
+article {
+  transition:
+    background-color 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Cards and interactive elements */
+.card,
+[class*="rounded-"] {
+  transition:
+    background-color 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Buttons */
+button,
+a {
+  transition:
+    background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   OPERATIONS CONSOLE THEME SUPPORT (arena-* CSS vars)
+   ============================================================ */
+/* These classes reference CSS vars so they respond to data-theme */
+.bg-arena-bg { background-color: var(--arena-bg) !important; }
+.bg-arena-surface { background-color: var(--arena-surface) !important; }
+.text-arena-text { color: var(--arena-text-primary) !important; }
+.text-arena-muted { color: var(--arena-text-muted) !important; }
+.border-arena-border,
+.border-white\/5 { border-color: var(--arena-divider) !important; }
+
+/* Header & sidebar in ops console */
+html[data-theme="light"] .bg-arena-bg\/85 {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+}
+html[data-theme="light"] .border-white\/5 {
+  border-color: rgba(203, 213, 225, 0.60) !important;
+}
+html[data-theme="light"] .text-arena-text,
+html[data-theme="light"] .text-white {
+  color: #0f172a !important;
+}
+html[data-theme="light"] .text-arena-muted {
+  color: #64748b !important;
+}
+html[data-theme="light"] .bg-arena-surface\/40,
+html[data-theme="light"] .bg-arena-surface\/30 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+html[data-theme="light"] .border-white\/10 {
+  border-color: rgba(203, 213, 225, 0.70) !important;
+}
+html[data-theme="light"] .bg-white\/5,
+html[data-theme="light"] .bg-white\/10 {
+  background-color: rgba(30, 41, 59, 0.04) !important;
+}
+html[data-theme="light"] .hover\:bg-white\/5:hover {
+  background-color: rgba(30, 41, 59, 0.06) !important;
+}
+html[data-theme="light"] .text-white\/95,
+html[data-theme="light"] .text-white\/90 {
+  color: #0f172a !important;
+}
+
+/* Input fields */
+html[data-theme="light"] .bg-black\/50,
+html[data-theme="light"] .bg-black\/60 {
+  background-color: var(--arena-input-bg) !important;
+  color: var(--arena-input-text) !important;
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--arena-scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--arena-scrollbar-thumb);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--arena-scrollbar-hover);
+}
+
+/* ============================================================
+   SKIP LINK (Accessibility)
+   ============================================================ */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--arena-primary);
+  color: white;
+  padding: 12px 24px;
+  z-index: 9999;
+  transition: top 0.3s ease;
+  border-radius: 0 0 8px 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 20px var(--arena-primary-glow);
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ============================================================
+   SELECTION COLORS
+   ============================================================ */
+::selection {
+  background-color: var(--arena-selection-bg);
+  color: var(--arena-selection-text);
+}
+
+/* ============================================================
+   FOCUS ACCESSIBILITY
+   ============================================================ */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--arena-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   THEME TOGGLE COMPONENT
+   ============================================================ */
+.theme-toggle-dark {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  box-shadow: 0 0 12px rgba(79, 124, 255, 0.25), inset 0 0 8px rgba(79, 124, 255, 0.08);
+}
+
+.theme-toggle-light {
+  background: linear-gradient(135deg, #fef9c3 0%, #fde68a 100%);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.35), inset 0 0 8px rgba(251, 191, 36, 0.08);
+}
+
+/* ============================================================
+   LANDING PAGE — LIGHT THEME OVERRIDES FOR HARDCODED DARK CLASSES
+   ============================================================ */
+html[data-theme="light"] .landing-card {
+  background-color: rgba(255, 255, 255, 0.80);
+  border-color: rgba(30, 41, 59, 0.10);
+  box-shadow: 0 2px 16px rgba(30, 41, 59, 0.08);
+}
+html[data-theme="light"] .landing-card:hover {
+  border-color: rgba(37, 99, 235, 0.30);
+}
+html[data-theme="light"] .landing-section-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.90) 0%, rgba(238,244,255,0.80) 100%);
+  border-color: rgba(30, 41, 59, 0.10);
+}
+
+/* ============================================================
+   GLASS CARD COMPONENT — LIGHT THEME
+   ============================================================ */
+html[data-theme="light"] .glass-card-surface {
+  background-color: rgba(255, 255, 255, 0.90) !important;
+  border-color: rgba(30, 41, 59, 0.10) !important;
+  box-shadow: 0 2px 16px rgba(30, 41, 59, 0.08) !important;
+}
+
+/* ============================================================
+   BADGE COMPONENT — ENSURE CONTRAST
+   ============================================================ */
+.badge-success { color: #15803d; background-color: #dcfce7; border-color: #bbf7d0; }
+.badge-warning { color: #92400e; background-color: #fef3c7; border-color: #fde68a; }
+.badge-error { color: #991b1b; background-color: #fee2e2; border-color: #fecaca; }
+.badge-info { color: #1e40af; background-color: #dbeafe; border-color: #bfdbfe; }
+.badge-neutral { color: #475569; background-color: #f1f5f9; border-color: #e2e8f0; }
+
+html[data-theme="dark"] .badge-success { color: #4ade80; background-color: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.20); }
+html[data-theme="dark"] .badge-warning { color: #fbbf24; background-color: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.20); }
+html[data-theme="dark"] .badge-error { color: #f87171; background-color: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.20); }
+html[data-theme="dark"] .badge-info { color: #60a5fa; background-color: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.20); }
+html[data-theme="dark"] .badge-neutral { color: #94a3b8; background-color: rgba(148,163,184,0.10); border-color: rgba(148,163,184,0.15); }
+
+/* ============================================================
+   ARENA CARD & INPUT UTILITY COMPONENTS
+   ============================================================ */
+.arena-card {
+  background-color: var(--arena-card-bg);
+  border-color: var(--arena-card-border);
+  box-shadow: var(--arena-card-shadow);
+  color: var(--arena-text-primary);
+}
+
+.arena-input {
+  background-color: var(--arena-input-bg);
+  border-color: var(--arena-input-border);
+  color: var(--arena-input-text);
+}
+.arena-input::placeholder {
+  color: var(--arena-input-placeholder);
+}
+

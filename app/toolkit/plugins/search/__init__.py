@@ -1,0 +1,1 @@
+# Search Tool Initialization Hook
