@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PageHeader from "@/features/app/components/PageHeader";
 import GlassCard from "@/components/ui/GlassCard";
 import Badge from "@/components/ui/Badge";
@@ -9,6 +9,8 @@ import { useRole } from "@/features/app/providers/RoleProvider";
 import { useScenario } from "@/features/app/providers/ScenarioProvider";
 import { useToast } from "@/features/app/providers/ToastProvider";
 import { MetricCard, AgentCard } from "@/features/app/components";
+import { apiClient } from "@/services/api/client";
+import { useEventStream } from "@/hooks/useEventStream";
 
 // Definitions of all 14 specialized AI agents
 interface AgentMeta {
@@ -79,32 +81,89 @@ export default function ArenaMindHub() {
     "WebSocket telemetry streaming at 60 FPS.",
   ]);
 
-  const handleCopilotPromptClick = (prompt: string, response: string) => {
-    setCopilotHistory((prev) => [...prev, `Operator: ${prompt}`, `Copilot: `]);
-    let currentText = "";
-    let charIndex = 0;
-    const interval = setInterval(() => {
-      if (charIndex < response.length) {
-        currentText += response[charIndex];
-        setCopilotHistory((prev) => {
-          const updated = [...prev];
-          updated[updated.length - 1] = `Copilot: ${currentText}`;
-          return updated;
-        });
-        charIndex++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 15);
-    addToast("Streaming Copilot response...", "info");
+  // Hook live real-time system events stream
+  const { eventHistory } = useEventStream(["*"]);
+
+  useEffect(() => {
+    if (eventHistory.length > 0) {
+      const top = eventHistory[0];
+      const timeStr = new Date(top.timestamp || Date.now()).toLocaleTimeString();
+      setConsoleLogs((prev) => [
+        ...prev,
+        `[${timeStr}] ALERT: ${top.event_type} from ${top.source} | Priority: ${top.priority}`
+      ]);
+    }
+  }, [eventHistory]);
+
+  interface OrchestratorTestResult {
+    selected_agent?: string;
+    pipeline_result?: {
+      overall_risk?: string;
+      recommended_actions?: string[];
+    };
+  }
+
+  const handleCopilotPromptClick = async (prompt: string, presetResponse: string) => {
+    setCopilotHistory((prev) => [...prev, `Operator: ${prompt}`, `Copilot: Analyzing incident...`]);
+    addToast("Routing request to ArenaMind Orchestrator...", "info");
+
+    try {
+      const res = await apiClient.post<OrchestratorTestResult>("/orchestrator/test", {
+        request_type: role === "security" ? "security" : role === "medical" ? "medical" : "crowd",
+        message: prompt
+      });
+
+      const responseText = res.pipeline_result?.recommended_actions?.join(" | ") || presetResponse;
+      
+      // Stream output characters effect
+      let currentText = "";
+      let charIndex = 0;
+      const interval = setInterval(() => {
+        if (charIndex < responseText.length) {
+          currentText += responseText[charIndex];
+          setCopilotHistory((prev) => {
+            const updated = [...prev];
+            updated[updated.length - 1] = `Copilot: ${currentText}`;
+            return updated;
+          });
+          charIndex++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 12);
+    } catch (err: unknown) {
+      console.error(err);
+      const errMsg = err instanceof Error ? err.message : String(err);
+      setCopilotHistory((prev) => [...prev, `Copilot: Error contacting orchestration engine: ${errMsg}`]);
+    }
   };
 
-  const handleSendConsole = (e: React.FormEvent) => {
+  const handleSendConsole = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!consoleInput.trim()) return;
     const cmd = consoleInput.trim();
-    setConsoleLogs((prev) => [...prev, `> ${cmd}`, `Command executed: ${cmd} - success`]);
+    setConsoleLogs((prev) => [...prev, `> ${cmd}`]);
     setConsoleInput("");
+
+    try {
+      setConsoleLogs((prev) => [...prev, `ArenaMind OS: Dispatched command execution query...`]);
+      const res = await apiClient.post<OrchestratorTestResult>("/orchestrator/test", {
+        request_type: role === "security" ? "security" : role === "medical" ? "medical" : "crowd",
+        message: cmd
+      });
+      const selected = res.selected_agent || "Unknown";
+      const risk = res.pipeline_result?.overall_risk || "NORMAL";
+      const recs = res.pipeline_result?.recommended_actions?.join(", ") || "None";
+      setConsoleLogs((prev) => [
+        ...prev,
+        `➔ Selected Agent: ${selected}`,
+        `➔ Risk Classification: ${risk}`,
+        `➔ Recommended Playbook: ${recs}`
+      ]);
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      setConsoleLogs((prev) => [...prev, `➔ Command Error: ${errMsg}`]);
+    }
   };
 
   // Dynamic values depending on active scenario

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { ScenarioContextProps, ScenarioProviderProps, ScenarioId, ScenarioDetails, SelectedObject } from "./ScenarioProvider.types";
+import { ScenarioContextProps, ScenarioProviderProps, ScenarioId, ScenarioDetails, SelectedObject, SimulationReport } from "./ScenarioProvider.types";
+import { apiClient } from "@/services/api/client";
 
 const SCENARIO_MAP: Record<ScenarioId, ScenarioDetails> = {
   clear: {
@@ -71,6 +72,7 @@ const ScenarioContext = createContext<ScenarioContextProps | undefined>(undefine
 export function ScenarioProvider({ children }: ScenarioProviderProps) {
   const [activeScenario, setActiveScenario] = useState<ScenarioId>("clear");
   const [selectedObject, setSelectedObject] = useState<SelectedObject | null>(null);
+  const [simulationResult, setSimulationResult] = useState<SimulationReport | null>(null);
 
   useEffect(() => {
     const savedScenario = localStorage.getItem("arena-scenario") as ScenarioId;
@@ -79,9 +81,41 @@ export function ScenarioProvider({ children }: ScenarioProviderProps) {
     }
   }, []);
 
-  const setScenario = (newScenario: ScenarioId) => {
+  const setScenario = async (newScenario: ScenarioId) => {
     setActiveScenario(newScenario);
     localStorage.setItem("arena-scenario", newScenario);
+
+    if (newScenario === "clear") {
+      setSimulationResult(null);
+      return;
+    }
+
+    let scenarioName = "Crowd Surge";
+    let prompt = "High density congestion detected at entry gates.";
+
+    if (newScenario === "medical_sos") {
+      scenarioName = "VIP Medical Emergency";
+      prompt = "VIP collapse reported in Suite B area.";
+    } else if (newScenario === "security_threat") {
+      scenarioName = "Gate Breach";
+      prompt = "Security alarm triggered at main entry gates.";
+    } else if (newScenario === "weather_delay") {
+      scenarioName = "Fire in Food Court";
+      prompt = "Smoke detected in Sect B Food Court area.";
+    } else if (newScenario === "stock_shortage") {
+      scenarioName = "Lost Child";
+      prompt = "A lost child reported near retail sector.";
+    }
+
+    try {
+      const res = await apiClient.post<SimulationReport>("/simulation/start", {
+        scenario_name: scenarioName,
+        incident_prompt: prompt,
+      });
+      setSimulationResult(res);
+    } catch (err) {
+      console.error("Failed to start backend simulation:", err);
+    }
   };
 
   const scenarioDetails = SCENARIO_MAP[activeScenario] || SCENARIO_MAP.clear;
@@ -94,6 +128,8 @@ export function ScenarioProvider({ children }: ScenarioProviderProps) {
         scenarioDetails,
         selectedObject,
         setSelectedObject,
+        simulationResult,
+        setSimulationResult,
       }}
     >
       {children}

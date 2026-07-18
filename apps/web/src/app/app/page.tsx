@@ -3,6 +3,7 @@
 import React from "react";
 import PageHeader from "@/features/app/components/PageHeader";
 import Button from "@/components/ui/Button";
+import GlassCard from "@/components/ui/GlassCard";
 import { useRole } from "@/features/app/providers/RoleProvider";
 import { useScenario } from "@/features/app/providers/ScenarioProvider";
 import { ScenarioId } from "@/features/app/providers/ScenarioProvider/ScenarioProvider.types";
@@ -40,7 +41,7 @@ const SCENARIO_LABELS: Record<ScenarioId, string> = {
  */
 export default function AppPage() {
   const { role } = useRole();
-  const { activeScenario, setScenario, scenarioDetails, setSelectedObject } = useScenario();
+  const { activeScenario, setScenario, scenarioDetails, setSelectedObject, simulationResult } = useScenario();
   const { addToast } = useToast();
 
   const handleSelectScenario = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -226,6 +227,25 @@ export default function AppPage() {
         </div>
 
       </div>
+
+      {/* Real-time incident telemetry log */}
+      {simulationResult && (
+        <div className="space-y-3">
+          <span className="text-[10px] uppercase font-bold text-arena-muted font-mono block tracking-wider text-left">
+            Live Incident Telemetry Logs (FastAPI Stream)
+          </span>
+          <GlassCard padding="sm" rounded="sm" border={true} className="bg-black/40 p-4 text-left">
+            <div className="space-y-1 font-mono text-[10px] text-arena-muted max-h-36 overflow-y-auto">
+              {simulationResult.incident_timeline?.map((evt: string, idx: number) => (
+                <div key={idx} className="flex items-start space-x-2">
+                  <span className="text-arena-danger font-bold">➔</span>
+                  <span className="text-white/90">{evt}</span>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+        </div>
+      )}
 
       {/* Bottom Segment: Match Timeline */}
       <div className="space-y-3">

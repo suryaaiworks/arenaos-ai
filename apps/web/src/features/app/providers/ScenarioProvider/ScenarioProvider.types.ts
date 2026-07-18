@@ -25,12 +25,26 @@ export interface SelectedObject {
   metrics: Record<string, string>;
 }
 
+export interface SimulationReport {
+  simulation_id: string;
+  status: string;
+  incident_timeline: string[];
+  risk_heatmap: Array<{
+    zone_name: string;
+    location_id: string;
+    risk_score: number;
+    occupancy_rate: number;
+  }>;
+}
+
 export interface ScenarioContextProps {
   activeScenario: ScenarioId;
   setScenario: (scenario: ScenarioId) => void;
   scenarioDetails: ScenarioDetails;
   selectedObject: SelectedObject | null;
   setSelectedObject: (obj: SelectedObject | null) => void;
+  simulationResult: SimulationReport | null;
+  setSimulationResult: (result: SimulationReport | null) => void;
 }
 
 export interface ScenarioProviderProps {
