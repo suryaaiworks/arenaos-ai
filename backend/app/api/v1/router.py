@@ -13,6 +13,9 @@ from app.api.v1.endpoints import (
     gemini,
     memory,
     communication,
+    security,
+    crowd,
+    emergency,
 )
 
 api_router = APIRouter()
@@ -31,3 +34,6 @@ api_router.include_router(inference.router, prefix="/inference", tags=["Inferenc
 api_router.include_router(gemini.router, prefix="/providers/gemini", tags=["Gemini"])
 api_router.include_router(memory.router, prefix="/memory", tags=["Memory"])
 api_router.include_router(communication.router, prefix="/communication", tags=["Communication"])
+api_router.include_router(security.router, prefix="/security", tags=["Security Agent"])
+api_router.include_router(crowd.router, prefix="/crowd", tags=["Crowd Agent"])
+api_router.include_router(emergency.router, prefix="/emergency", tags=["Emergency Agent"])

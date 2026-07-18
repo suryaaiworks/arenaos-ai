@@ -28,11 +28,65 @@ class MockProvider(BaseModelProvider):
         start_time = time.time()
         
         # Predictable response based on user input length
+        import json
         text_len = len(request.user_prompt)
-        text_out = (
-            f"[MOCK RESPONSE] Received prompt: '{request.user_prompt}'. "
-            f"Orchestration workflow resolved cleanly. Context count is {len(request.context)}."
-        )
+        
+        sys_prompt = request.system_prompt or ""
+        user_prompt = request.user_prompt or ""
+        
+        if "json" in sys_prompt.lower() or "json" in user_prompt.lower():
+            if "severity" in sys_prompt.lower() or "emergency" in user_prompt.lower() or "evacuation" in user_prompt.lower() or "outage" in user_prompt.lower():
+                # Emergency JSON
+                text_out = json.dumps({
+                    "incident_type": "Fire",
+                    "severity": "CRITICAL",
+                    "confidence": 0.96,
+                    "summary": f"[MOCK EMERGENCY] Evacuation alert for: '{request.user_prompt}'.",
+                    "affected_zone": "Food Court",
+                    "recommended_actions": ["Activate alarm", "Evacuate Zone B"],
+                    "evacuation_required": True,
+                    "medical_required": True,
+                    "security_required": True,
+                    "notify_agents": ["SecurityAgent", "MedicalAgent", "CrowdAgent", "NavigationAgent"],
+                    "timeline": ["13:10 - Fire detected", "13:12 - Evacuation ordered"],
+                    "memory_updates": {"tags": ["fire_evac"]},
+                    "metadata": {"affected_sector": "B"}
+                })
+            elif "density" in sys_prompt.lower() or "crowd" in user_prompt.lower() or "people" in user_prompt.lower():
+                # Crowd JSON
+                text_out = json.dumps({
+                    "crowd_zone": "Zone A",
+                    "density_level": "HIGH",
+                    "estimated_people": 3500,
+                    "risk_level": "HIGH",
+                    "confidence": 0.94,
+                    "summary": f"[MOCK CROWD] buid-up detected: '{request.user_prompt}'.",
+                    "predicted_behavior": "Queue bottleneck formation",
+                    "recommended_actions": ["Reroute traffic to Gate B", "Open Gate A auxiliary slots"],
+                    "rerouting_required": True,
+                    "notify_agents": ["SecurityAgent", "NavigationAgent"],
+                    "memory_updates": {"tags": ["crowd_buildup"]},
+                    "metadata": {"impacted_gate": "Gate A"}
+                })
+            else:
+                # Security JSON
+                text_out = json.dumps({
+                    "incident_type": "Suspicious object",
+                    "risk_level": "HIGH",
+                    "confidence": 0.92,
+                    "summary": f"[MOCK SECURITY] Suspect scenario: '{request.user_prompt}'.",
+                    "recommended_actions": ["Isolate perimeter", "Deploy local security team"],
+                    "required_tools": ["IncidentTool", "NavigationTool"],
+                    "escalation_required": True,
+                    "notify_agents": ["CrowdAgent", "EmergencyAgent"],
+                    "memory_updates": {"tags": ["suspect_alert"]},
+                    "metadata": {"sector": "Zone C"}
+                })
+        else:
+            text_out = (
+                f"[MOCK RESPONSE] Received prompt: '{request.user_prompt}'. "
+                f"Orchestration workflow resolved cleanly. Context count is {len(request.context)}."
+            )
         
         latency = time.time() - start_time
         
