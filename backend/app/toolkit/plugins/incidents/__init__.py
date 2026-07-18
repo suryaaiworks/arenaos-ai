@@ -1,0 +1,1 @@
+# Incidents Tool Initialization Hook

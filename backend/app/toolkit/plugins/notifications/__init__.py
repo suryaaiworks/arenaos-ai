@@ -1,0 +1,1 @@
+# Notifications Tool Initialization Hook

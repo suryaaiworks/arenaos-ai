@@ -1,0 +1,22 @@
+# Python ignore rules
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.env
+
+# Database files
+*.db
+*.sqlite3
+arenaos.db
+
+# Alembic migrations cache
+alembic/hacks/
+alembic/versions/*
+
+# OS files
+.DS_Store
+Thumbs.db
