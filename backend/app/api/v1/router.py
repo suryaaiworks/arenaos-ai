@@ -17,6 +17,9 @@ from app.api.v1.endpoints import (
     crowd,
     emergency,
     simulation,
+    observability,
+    replay,
+    knowledge,
 )
 
 api_router = APIRouter()
@@ -39,3 +42,6 @@ api_router.include_router(security.router, prefix="/security", tags=["Security A
 api_router.include_router(crowd.router, prefix="/crowd", tags=["Crowd Agent"])
 api_router.include_router(emergency.router, prefix="/emergency", tags=["Emergency Agent"])
 api_router.include_router(simulation.router, prefix="/simulation", tags=["Simulation Engine"])
+api_router.include_router(observability.router, prefix="/observability", tags=["Observability Engine"])
+api_router.include_router(replay.router, prefix="/replay", tags=["Replay Engine"])
+api_router.include_router(knowledge.router, prefix="/knowledge", tags=["Knowledge Engine"])

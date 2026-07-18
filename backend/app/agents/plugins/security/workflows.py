@@ -38,7 +38,23 @@ class SecurityWorkflowRunner:
                 context_data["previous_session_alerts_count"] = len(history_mems)
                 context_data["previous_alerts_recaps"] = [h.content.get("summary", "") for h in history_mems]
 
-            # 2. Build prompt and run via InferenceEngine
+            # 2. Query Knowledge Engine for trusted policies & playbooks
+            logger.info("SecurityWorkflow: Retrieving operational guidelines from Knowledge Engine...")
+            from app.knowledge.engine import knowledge_engine
+            knowledge_res = knowledge_engine.evaluate_policies(
+                category="security",
+                context={
+                    "incident": req.incident,
+                    "severity": context_data.get("severity", "LOW"),
+                    "proximity": context_data.get("proximity", "LOW"),
+                    "occupancy_rate": context_data.get("occupancy_rate", 0.0)
+                }
+            )
+            context_data["matched_policies"] = knowledge_res.matched_policies
+            context_data["matched_rules"] = knowledge_res.matched_rules
+            context_data["playbook_recommendations"] = knowledge_res.recommendations
+
+            # 3. Build prompt and run via InferenceEngine
             logger.info("SecurityWorkflow: Calling InferenceEngine pipeline...")
             
             # Request tool capabilities matching our needs

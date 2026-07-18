@@ -102,7 +102,7 @@ class MissionExecutor:
         # 3. Store mission report log in Memory Engine
         logger.info("MissionExecutor: Storing unified mission history in Memory Engine...")
         mem_rec = MemoryRecord(
-            session_id=session_id,
+            session_id=str(mission.mission_id),
             memory_type="long_term",
             content=mission.model_dump(),
             metadata={"source": "MissionOrchestrator", "category": "collaboration_audit"}

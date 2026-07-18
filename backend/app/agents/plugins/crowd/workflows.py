@@ -37,7 +37,23 @@ class CrowdWorkflowRunner:
                 context_data["previous_density_alerts_count"] = len(history_mems)
                 context_data["previous_alerts_recaps"] = [h.content.get("summary", "") for h in history_mems]
 
-            # 2. Call InferenceEngine
+            # 2. Query Knowledge Engine for trusted policies & playbooks
+            logger.info("CrowdWorkflow: Retrieving operational guidelines from Knowledge Engine...")
+            from app.knowledge.engine import knowledge_engine
+            knowledge_res = knowledge_engine.evaluate_policies(
+                category="crowd",
+                context={
+                    "incident": req.incident,
+                    "severity": context_data.get("severity", "LOW"),
+                    "proximity": context_data.get("proximity", "LOW"),
+                    "occupancy_rate": context_data.get("occupancy_rate", 0.0)
+                }
+            )
+            context_data["matched_policies"] = knowledge_res.matched_policies
+            context_data["matched_rules"] = knowledge_res.matched_rules
+            context_data["playbook_recommendations"] = knowledge_res.recommendations
+
+            # 3. Call InferenceEngine
             logger.info("CrowdWorkflow: Calling InferenceEngine pipeline...")
             
             capabilities = ["analytics", "navigation", "incident_management", "notification", "database", "search"]

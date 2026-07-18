@@ -27,7 +27,7 @@ class MissionManager:
             mission_type=m_type,
             status=MissionState.CREATED,
             participating_agents=agents,
-            timeline=[f"{uuid.uuid4()} - Mission record created"],
+            timeline=[f"{mission_id} - Mission record created"],
             metadata=metadata or {}
         )
         
