@@ -16,6 +16,7 @@ from app.api.v1.endpoints import (
     security,
     crowd,
     emergency,
+    simulation,
 )
 
 api_router = APIRouter()
@@ -37,3 +38,4 @@ api_router.include_router(communication.router, prefix="/communication", tags=["
 api_router.include_router(security.router, prefix="/security", tags=["Security Agent"])
 api_router.include_router(crowd.router, prefix="/crowd", tags=["Crowd Agent"])
 api_router.include_router(emergency.router, prefix="/emergency", tags=["Emergency Agent"])
+api_router.include_router(simulation.router, prefix="/simulation", tags=["Simulation Engine"])

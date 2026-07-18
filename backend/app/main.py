@@ -37,9 +37,15 @@ async def lifespan(app: FastAPI):
     
     # Initialize model provider configuration objects
     await provider_manager.initialize_providers()
+    
+    # Initialize realtime event streaming loop
+    from app.streaming.engine import event_streaming_engine
+    event_streaming_engine.initialize()
         
     yield
     
+    # Power down realtime event streaming loop
+    await event_streaming_engine.shutdown()
     logger.info("Shutting down ArenaOS AI FastAPI Backend...")
 
 
@@ -93,3 +99,35 @@ async def health_check():
         "latency_ms": health_data["latency_ms"],
         "services": "ready"
     }
+
+
+from fastapi import WebSocket, WebSocketDisconnect
+import json
+
+@app.websocket("/ws/events")
+async def websocket_events_endpoint(websocket: WebSocket):
+    """
+    WebSocket endpoint routing realtime platform events to connected clients.
+    """
+    from app.streaming.engine import event_streaming_engine
+    await event_streaming_engine.connections.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            try:
+                msg = json.loads(data)
+                action = msg.get("action")
+                topic = msg.get("topic")
+                if action == "subscribe" and topic:
+                    event_streaming_engine.connections.subscribe(websocket, topic)
+                    await websocket.send_text(json.dumps({"status": "subscribed", "topic": topic}))
+                elif action == "unsubscribe" and topic:
+                    event_streaming_engine.connections.unsubscribe(websocket, topic)
+                    await websocket.send_text(json.dumps({"status": "unsubscribed", "topic": topic}))
+                else:
+                    await websocket.send_text(json.dumps({"status": "pong"}))
+            except Exception:
+                await websocket.send_text(json.dumps({"status": "pong"}))
+    except WebSocketDisconnect:
+        event_streaming_engine.connections.disconnect(websocket)
+
