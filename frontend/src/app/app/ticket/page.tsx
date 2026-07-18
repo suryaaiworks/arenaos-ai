@@ -156,7 +156,7 @@ export default function FanCompanionPage() {
               <div className="space-y-1">
                 <span className="text-[9px] uppercase font-bold text-arena-muted font-mono block">MATCHDAY FIXTURE</span>
                 <p className="text-xs font-extrabold text-white">Argentina vs France</p>
-                <p className="text-[9px] text-arena-muted font-mono">Lusail Iconic Stadium</p>
+                <p className="text-[9px] text-arena-muted font-mono">Vivekananda Yuba Bharati Krirangan</p>
               </div>
               <div className="h-14 w-14 bg-white p-1 rounded-lg shrink-0 flex items-center justify-center">
                 {/* Simulated QR blocks grid using vector paths */}
@@ -228,7 +228,7 @@ export default function FanCompanionPage() {
               </span>
               <div className="space-y-3">
                 <StatusCard title="Food Court Stand 3" statusText="3m Wait" statusType="success" details="Beverage stocks normal. Fast checkout lanes active." />
-                <StatusCard title="Lusail Merchandise Store" statusText="8m Wait" statusType="warning" details="Peak wait times. Pre-order checkout suggested." />
+                <StatusCard title="Salt Lake Merchandise Store" statusText="8m Wait" statusType="warning" details="Peak wait times. Pre-order checkout suggested." />
               </div>
             </div>
 

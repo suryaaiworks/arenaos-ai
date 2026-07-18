@@ -942,7 +942,7 @@ function FanAppContent() {
                     ⚽ FIFA STADIUM CONTEXT DETECTED
                   </Badge>
                   <h1 className="text-3xl md:text-4xl font-black tracking-tight leading-none text-white">
-                    Welcome to Lusail Stadium
+                    Welcome to Salt Lake Stadium
                   </h1>
                   <p className="text-xs text-blue-100 max-w-xl font-semibold">
                     Hello Ticket Holder! Your seat in <span className="font-bold underline">{ticket.section}</span> is ready. Walk direct via Gate B turnstiles.
@@ -1210,7 +1210,7 @@ function FanAppContent() {
                   <div className="space-y-1">
                     <span className="block text-[8px] uppercase font-bold text-blue-300/80 font-mono">Fixture Match</span>
                     <span className="text-sm font-extrabold text-white">Argentina vs France</span>
-                    <span className="block text-[9px] text-blue-200">Lusail Stadium, Qatar</span>
+                    <span className="block text-[9px] text-blue-200">Salt Lake Stadium, Kolkata, India</span>
                   </div>
                   
                   {/* Styled QR Code */}
@@ -2687,7 +2687,7 @@ function FanAppContent() {
                 {/* SECTION 4: Interactive Stadium Map */}
                 <GlassCard padding="md" rounded="md" border={true} className={`${cardClass} p-5 space-y-3`}>
                   <div className="flex justify-between items-center font-mono text-[9px] font-bold text-slate-400">
-                    <span>🏟️ LUSAIL DYNAMIC TWIN PATHFINDING</span>
+                    <span>🏟️ SALT LAKE DYNAMIC TWIN PATHFINDING</span>
                     <span className="text-emerald-500">LIVE ROUTE STRETCH</span>
                   </div>
 
@@ -3178,7 +3178,7 @@ function FanAppContent() {
                   {/* Card Footer details */}
                   <div className="border-t border-solid border-slate-100 pt-4 flex justify-between items-center text-[8px] font-mono text-slate-400">
                     <span>MEMBER SINCE: JULY 2026</span>
-                    <span>LUSAIL SMART STADIUM, QATAR</span>
+                    <span>SALT LAKE SMART STADIUM, KOLKATA, INDIA</span>
                   </div>
                 </GlassCard>
 
@@ -3538,7 +3538,7 @@ function FanAppContent() {
                       { label: "Parking Return Reminders", key: "parkingReminder" },
                       { label: "Emergency Stadium Alerts", key: "emergencyAlerts" },
                       { label: "AI Recommendations", key: "aiRecommendations" },
-                      { label: "Weather Alerts (Lusail)", key: "weatherAlerts" },
+                      { label: "Weather Alerts (Salt Lake Stadium)", key: "weatherAlerts" },
                       { label: "Exclusive Shopping Offers", key: "shoppingOffers" }
                     ].map((item) => (
                       <div key={item.key} className="flex items-center justify-between p-2 rounded-xl bg-slate-500/5 border border-solid border-slate-200/5 min-h-[38px]">
@@ -3799,7 +3799,7 @@ function FanAppContent() {
 
                 <div className="grid grid-cols-2 gap-2 pt-2">
                   <button
-                    onClick={() => addToast("Connecting with Lusail Help Desk...", "info")}
+                    onClick={() => addToast("Connecting with Salt Lake Help Desk...", "info")}
                     className="h-9 rounded-xl px-2.5 text-[10px] font-bold border border-solid border-slate-200 text-[#475569] hover:bg-slate-500/5 transition-all cursor-pointer bg-white"
                   >
                     🛠️ Help Center

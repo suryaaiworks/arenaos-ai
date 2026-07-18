@@ -5,3 +5,4 @@ export * from "./CommandPaletteProvider";
 export * from "./RoleProvider";
 export * from "./ScenarioProvider";
 export * from "./LanguageProvider";
+export * from "./DashboardProvider";

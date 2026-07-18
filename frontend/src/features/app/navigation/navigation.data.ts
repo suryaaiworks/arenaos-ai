@@ -28,11 +28,11 @@ export const ROLE_NAVIGATION_ITEMS: Record<UserRole, NavItem[]> = {
     { label: "SOS Emergency", href: "/app", iconName: "emergency" },
   ],
   operations: [
-    { label: "Ops Telemetry", href: "/app", iconName: "dashboard" },
+    { label: "Ops Telemetry", href: "/app/ops-telemetry", iconName: "dashboard" },
     { label: "AI Agents Registry", href: "/app/agents", iconName: "agents" },
-    { label: "Gate Influx Status", href: "/app", iconName: "operations" },
-    { label: "Power & Utilities", href: "/app", iconName: "utilities" },
-    { label: "Facility Maintenance", href: "/app", iconName: "maintenance" },
+    { label: "Gate Influx Status", href: "/app/gate-influx", iconName: "operations" },
+    { label: "Power & Utilities", href: "/app/power-utilities", iconName: "utilities" },
+    { label: "Facility Maintenance", href: "/app/facility-maintenance", iconName: "maintenance" },
   ],
   security: [
     { label: "Threat Console", href: "/app", iconName: "security" },

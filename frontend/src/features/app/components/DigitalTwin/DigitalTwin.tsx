@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { DigitalTwinProps, TwinLayerId, TwinSector, TwinMarker } from "./DigitalTwin.types";
 import { STADIUM_SECTORS, STADIUM_MARKERS } from "./DigitalTwin.data";
 import { useScenario } from "../../providers/ScenarioProvider";
 import GlassCard from "@/components/ui/GlassCard";
 import Button from "@/components/ui/Button";
+import { MODULE_DEFAULT_LAYERS } from "./DigitalTwin.layers";
 
 const LAYER_LABELS: Record<TwinLayerId, string> = {
   crowd: "Crowd Heatmap",
@@ -18,6 +19,17 @@ const LAYER_LABELS: Record<TwinLayerId, string> = {
   concessions: "Concessions status",
   utilities: "Utility grids",
   accessibility: "Wheelchair paths",
+  incidents: "Active Incidents",
+  agents: "AI Agents Presence",
+  memory: "Memory Allocations",
+  tasks: "Agent Active Tasks",
+  gateAlarms: "Gate Intrusion Alarms",
+  turnstiles: "Turnstile Flow Monitors",
+  powerGrid: "Substation Electrical Grid",
+  hvac: "HVAC Environmental Status",
+  maintenance: "Work Order Hotspots",
+  cleaningZones: "Cleaning Crew Corridors",
+  equipment: "Facility Systems Monitoring",
 };
 
 /**
@@ -25,13 +37,28 @@ const LAYER_LABELS: Record<TwinLayerId, string> = {
  * Implements SVG rendering pipeline, independent layers, dispatch paths, and selector hooks.
  */
 export function DigitalTwin({
-  activeLayers: initialLayers = ["crowd", "medical", "security", "utilities"],
+  activeLayers: initialLayers,
+  module,
   onSelectObject,
   className = "",
   ...props
 }: DigitalTwinProps) {
   const { activeScenario } = useScenario();
-  const [layers, setLayers] = useState<TwinLayerId[]>(initialLayers);
+  
+  const defaultLayers = module && MODULE_DEFAULT_LAYERS[module]
+    ? MODULE_DEFAULT_LAYERS[module]
+    : (initialLayers || ["crowd", "medical", "security", "utilities"]);
+
+  const [layers, setLayers] = useState<TwinLayerId[]>(defaultLayers);
+
+  useEffect(() => {
+    if (module && MODULE_DEFAULT_LAYERS[module]) {
+      setLayers(MODULE_DEFAULT_LAYERS[module]);
+    } else if (initialLayers) {
+      setLayers(initialLayers);
+    }
+  }, [module, initialLayers]);
+
   const [zoom, setZoom] = useState(1);
   const [pitch, setPitch] = useState(58);
   const [rotate, setRotate] = useState(-12);
@@ -97,10 +124,10 @@ export function DigitalTwin({
         name: sector.name,
         type: "Stand",
         metrics: {
-          Occupancy: `${sector.occupancy}%`,
-          Status: sector.occupancy > 90 ? "CROWD CONGESTION" : "OPTIMAL",
-          Capacity: "18,500 seats",
-          Volunteers: "24 assigned",
+          "Operational Status": sector.occupancy > 90 ? "CROWD CONGESTION" : "OPTIMAL",
+          "Detailed Statistics": `Occupancy: ${sector.occupancy}% | Capacity: 21,250 seats`,
+          "Live AI Prediction": sector.occupancy > 90 ? "High exit density predicted at halftime. Stewards alert." : "Normal egress flow expected.",
+          "Incident History": "0 active incidents",
         },
       });
     }
@@ -114,10 +141,10 @@ export function DigitalTwin({
         name: marker.name,
         type: marker.type.toUpperCase(),
         metrics: {
-          Status: marker.status === "critical" ? "CRITICAL ALERT" : marker.status === "alert" ? "WARNING" : "OPERATIONAL",
-          Location: `Coords [${marker.x}, ${marker.y}]`,
-          Priority: marker.status === "critical" ? "HIGH" : "NORMAL",
-          Details: marker.id === "sos_204" ? "Spectator distress trigger seat 12" : "Telemetry coordinates active",
+          "Operational Status": marker.opStatus || (marker.status === "critical" ? "CRITICAL ALERT" : marker.status === "alert" ? "WARNING" : "OPERATIONAL"),
+          "Detailed Statistics": marker.stats || `Coords [${marker.x}, ${marker.y}]`,
+          "Live AI Prediction": marker.prediction || "Steady state predicted by CrowdSense AI.",
+          "Incident History": marker.incidentHistory || "No previous logs",
         },
       });
     }
@@ -271,75 +298,151 @@ export function DigitalTwin({
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Pitch Field element */}
-              <rect
-                x="75"
-                y="70"
-                width="50"
-                height="60"
-                className="stroke-emerald-500/50 fill-emerald-950/20"
-                strokeWidth="1.5"
-                rx="2"
-              />
-              <circle cx="100" cy="100" r="10" className="stroke-emerald-500/30" strokeWidth="1" />
-              <line x1="75" y1="100" x2="125" y2="100" className="stroke-emerald-500/30" strokeWidth="1" />
+              {module === "aiAgents" ? (
+                /* Agent relationship visualization / dependency graph */
+                <>
+                  {/* Glowing connection lines */}
+                  <line x1="100" y1="40" x2="100" y2="160" className="stroke-violet-500/40 animate-pulse" strokeWidth="1.5" />
+                  <line x1="50" y1="100" x2="100" y2="160" className="stroke-violet-500/40 animate-pulse" strokeWidth="1.5" />
+                  <line x1="150" y1="100" x2="100" y2="160" className="stroke-violet-500/40 animate-pulse" strokeWidth="1.5" />
+                  <line x1="50" y1="100" x2="100" y2="40" className="stroke-violet-500/30" strokeWidth="1" />
+                  <line x1="150" y1="100" x2="100" y2="40" className="stroke-violet-500/30" strokeWidth="1" />
 
-              {/* Seating stand sectors paths */}
-              {STADIUM_SECTORS.map((sector) => {
-                const isSelected = selectedId === sector.id;
-                const isCrowdOn = layers.includes("crowd");
-                
-                // Color mapping depending on layers
-                let fillVal = "rgba(255, 255, 255, 0.05)";
-                if (isCrowdOn) {
-                  if (sector.id === "west" || activeScenario === "gate_congestion" && sector.id === "north") {
-                    fillVal = "rgba(245, 158, 11, 0.25)"; // occupancy amber
-                  } else if (activeScenario === "weather_delay" && sector.id === "south") {
-                    fillVal = "rgba(239, 68, 68, 0.25)"; // alert red
-                  } else {
-                    fillVal = "rgba(16, 185, 129, 0.15)"; // clear green
-                  }
-                }
+                  {/* Flow dots along lines */}
+                  <circle r="2" className="fill-violet-400 animate-bounce">
+                    <animateMotion dur="3s" repeatCount="indefinite" path="M 100 40 L 100 160" />
+                  </circle>
+                  <circle r="2" className="fill-violet-400 animate-bounce">
+                    <animateMotion dur="2.5s" repeatCount="indefinite" path="M 50 100 L 100 160" />
+                  </circle>
+                  <circle r="2" className="fill-violet-400 animate-bounce">
+                    <animateMotion dur="2.8s" repeatCount="indefinite" path="M 150 100 L 100 160" />
+                  </circle>
 
-                let borderVal = isSelected ? "rgba(59, 130, 246, 0.9)" : "rgba(255, 255, 255, 0.1)";
-                if (layers.includes("security") && sector.id === "west") {
-                  borderVal = "rgba(239, 68, 68, 0.6)"; // Security boundary alert
-                }
+                  {/* Agent nodes */}
+                  <circle cx="100" cy="40" r="8" className="fill-violet-950 stroke-violet-500 cursor-pointer animate-pulse" strokeWidth="2" onClick={() => handleSelectMarker({ id: "crowd_agent", name: "CrowdSense AI Coordinator", type: "agent", status: "ok", x: 80, y: 40, label: "Crowd Agent" })} />
+                  <circle cx="50" cy="100" r="8" className="fill-violet-950 stroke-violet-500 cursor-pointer animate-pulse" strokeWidth="2" onClick={() => handleSelectMarker({ id: "security_agent", name: "Security Perimeter Guardian", type: "agent", status: "ok", x: 60, y: 130, label: "Security Agent" })} />
+                  <circle cx="150" cy="100" r="8" className="fill-violet-950 stroke-violet-500 cursor-pointer animate-pulse" strokeWidth="2" onClick={() => handleSelectMarker({ id: "emergency_agent", name: "Emergency Dispatcher AI", type: "agent", status: "ok", x: 140, y: 130, label: "Emergency Agent" })} />
+                  <circle cx="100" cy="160" r="8" className="fill-violet-950 stroke-violet-500 cursor-pointer animate-pulse" strokeWidth="2" onClick={() => handleSelectMarker({ id: "nav_agent", name: "Navigation AI Engine", type: "agent", status: "ok", x: 120, y: 40, label: "Nav Agent" })} />
 
-                return (
-                  <path
-                    key={sector.id}
-                    d={sector.coordinates}
-                    fill={fillVal}
-                    stroke={borderVal}
-                    strokeWidth={isSelected ? 2 : 1}
-                    className="cursor-pointer transition-all hover:fill-white/10"
-                    onClick={() => handleSelectSector(sector)}
+                  {/* Text labels */}
+                  <text x="100" y="26" textAnchor="middle" className="fill-violet-300 font-mono text-[7px] font-bold pointer-events-none select-none">CrowdSense AI</text>
+                  <text x="50" y="86" textAnchor="middle" className="fill-violet-300 font-mono text-[7px] font-bold pointer-events-none select-none">Security AI</text>
+                  <text x="150" y="86" textAnchor="middle" className="fill-violet-300 font-mono text-[7px] font-bold pointer-events-none select-none">Emergency AI</text>
+                  <text x="100" y="176" textAnchor="middle" className="fill-violet-300 font-mono text-[7px] font-bold pointer-events-none select-none">Navigation AI</text>
+                </>
+              ) : (
+                /* Stadium-based map rendering */
+                <>
+                  {/* Pitch Field element */}
+                  <rect
+                    x="75"
+                    y="70"
+                    width="50"
+                    height="60"
+                    className="stroke-emerald-500/50 fill-emerald-950/20"
+                    strokeWidth="1.5"
+                    rx="2"
                   />
-                );
-              })}
+                  <circle cx="100" cy="100" r="10" className="stroke-emerald-500/30" strokeWidth="1" />
+                  <line x1="75" y1="100" x2="125" y2="100" className="stroke-emerald-500/30" strokeWidth="1" />
 
-              {/* AI Dispatch flowing paths (stroke-dasharray animated overlay) */}
-              {layers.includes("utilities") && activeScenario === "medical_sos" && (
-                <path
-                  d="M 100 55 Q 130 90 155 135"
-                  fill="none"
-                  stroke="rgba(239, 68, 68, 0.8)"
-                  strokeWidth="2"
-                  strokeDasharray="4 4"
-                  className="animate-flow-line"
-                />
-              )}
+                  {/* Seating stand sectors paths */}
+                  {STADIUM_SECTORS.map((sector) => {
+                    const isSelected = selectedId === sector.id;
+                    const isCrowdOn = layers.includes("crowd");
+                    
+                    // Determine fill value depending on current module context
+                    let fillVal = "rgba(255, 255, 255, 0.03)";
+                    
+                    if (module === "gateInflux") {
+                      // Highlight gate sectors North and South only
+                      if (sector.id === "north" || sector.id === "south") {
+                        fillVal = isSelected ? "rgba(245, 158, 11, 0.2)" : "rgba(245, 158, 11, 0.08)";
+                      }
+                    } else if (module === "facilityMaintenance") {
+                      // Highlight sectors with active maintenance / work orders
+                      if (sector.id === "west") {
+                        fillVal = "rgba(239, 68, 68, 0.15)";
+                      } else if (sector.id === "east") {
+                        fillVal = "rgba(16, 185, 129, 0.08)";
+                      }
+                    } else if (isCrowdOn) {
+                      if (sector.id === "west" || activeScenario === "gate_congestion" && sector.id === "north") {
+                        fillVal = "rgba(245, 158, 11, 0.25)"; // occupancy amber
+                      } else if (activeScenario === "weather_delay" && sector.id === "south") {
+                        fillVal = "rgba(239, 68, 68, 0.25)"; // alert red
+                      } else {
+                        fillVal = "rgba(16, 185, 129, 0.15)"; // clear green
+                      }
+                    }
 
-              {layers.includes("utilities") && activeScenario === "gate_congestion" && (
-                <path
-                  d="M 95 15 Q 140 100 105 185"
-                  fill="none"
-                  stroke="rgba(245, 158, 11, 0.8)"
-                  strokeWidth="2"
-                  strokeDasharray="4 4"
-                  className="animate-flow-line"
-                />
+                    // Border settings
+                    let borderVal = isSelected ? "rgba(59, 130, 246, 0.9)" : "rgba(255, 255, 255, 0.08)";
+                    if (layers.includes("security") && sector.id === "west") {
+                      borderVal = "rgba(239, 68, 68, 0.6)"; // Security boundary alert
+                    } else if (module === "gateInflux" && (sector.id === "north" || sector.id === "south")) {
+                      borderVal = isSelected ? "rgba(245, 158, 11, 0.9)" : "rgba(245, 158, 11, 0.4)";
+                    }
+
+                    return (
+                      <path
+                        key={sector.id}
+                        d={sector.coordinates}
+                        fill={fillVal}
+                        stroke={borderVal}
+                        strokeWidth={isSelected ? 2 : 1}
+                        className="cursor-pointer transition-all hover:fill-white/10"
+                        onClick={() => handleSelectSector(sector)}
+                      />
+                    );
+                  })}
+
+                  {/* Power & Utilities: Draw glowing electrical connection lines connecting utility grids */}
+                  {module === "powerUtilities" && layers.includes("powerGrid") && (
+                    <>
+                      {/* Main grid supply paths */}
+                      <path
+                        d="M 55 50 L 160 60 L 170 80"
+                        fill="none"
+                        stroke="rgba(250, 204, 21, 0.6)"
+                        strokeWidth="1.5"
+                        strokeDasharray="3 3"
+                        className="animate-flow-line"
+                      />
+                      <path
+                        d="M 40 60 L 100 55 L 160 60"
+                        fill="none"
+                        stroke="rgba(20, 184, 166, 0.6)"
+                        strokeWidth="1.5"
+                        strokeDasharray="2 2"
+                      />
+                    </>
+                  )}
+
+                  {/* AI Dispatch flowing paths (stroke-dasharray animated overlay) */}
+                  {layers.includes("utilities") && activeScenario === "medical_sos" && (
+                    <path
+                      d="M 100 55 Q 130 90 155 135"
+                      fill="none"
+                      stroke="rgba(239, 68, 68, 0.8)"
+                      strokeWidth="2"
+                      strokeDasharray="4 4"
+                      className="animate-flow-line"
+                    />
+                  )}
+
+                  {layers.includes("utilities") && activeScenario === "gate_congestion" && (
+                    <path
+                      d="M 95 15 Q 140 100 105 185"
+                      fill="none"
+                      stroke="rgba(245, 158, 11, 0.8)"
+                      strokeWidth="2"
+                      strokeDasharray="4 4"
+                      className="animate-flow-line"
+                    />
+                  )}
+                </>
               )}
             </svg>
 
@@ -351,6 +454,14 @@ export function DigitalTwin({
               if (marker.type === "medical" && !layers.includes("medical")) return null;
               if (marker.type === "security" && !layers.includes("security")) return null;
               if (marker.type === "concession" && !layers.includes("concessions")) return null;
+              if (marker.type === "agent" && !layers.includes("agents")) return null;
+              if (marker.type === "gateAlarm" && !layers.includes("gateAlarms")) return null;
+              if (marker.type === "turnstile" && !layers.includes("turnstiles")) return null;
+              if (marker.type === "powerGrid" && !layers.includes("powerGrid")) return null;
+              if (marker.type === "hvac" && !layers.includes("hvac")) return null;
+              if (marker.type === "maintenance" && !layers.includes("maintenance")) return null;
+              if (marker.type === "cleaningZone" && !layers.includes("cleaningZones")) return null;
+              if (marker.type === "equipment" && !layers.includes("equipment")) return null;
 
               const isSelected = selectedId === marker.id;
               const isAlert = marker.status === "critical" || marker.status === "alert";
@@ -367,6 +478,14 @@ export function DigitalTwin({
                     marker.type === "security" && "bg-blue-500",
                     marker.type === "parking" && "bg-indigo-500",
                     marker.type === "concession" && "bg-purple-500",
+                    marker.type === "agent" && "bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.6)] animate-pulse",
+                    marker.type === "gateAlarm" && "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)] animate-bounce",
+                    marker.type === "turnstile" && "bg-sky-400 border-sky-200",
+                    marker.type === "powerGrid" && "bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.6)]",
+                    marker.type === "hvac" && "bg-teal-400",
+                    marker.type === "maintenance" && "bg-orange-500 shadow-[0_0_6px_rgba(249,115,22,0.5)]",
+                    marker.type === "cleaningZone" && "bg-emerald-400",
+                    marker.type === "equipment" && "bg-slate-400",
                     isSelected && "scale-150 ring-2 ring-white"
                   )}
                   style={{
@@ -405,29 +524,31 @@ export function DigitalTwin({
           Visualization Layers
         </span>
         <div className="flex flex-col space-y-2">
-          {(Object.keys(LAYER_LABELS) as TwinLayerId[]).map((layerId) => {
-            const isActive = layers.includes(layerId);
-            return (
-              <button
-                key={layerId}
-                onClick={() => toggleLayer(layerId)}
-                className={cn(
-                  "flex items-center space-x-2.5 px-2.5 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer",
-                  isActive
-                    ? "bg-arena-primary/10 border-arena-primary/20 text-white"
-                    : "bg-transparent border-transparent text-arena-muted hover:text-white hover:bg-white/5"
-                )}
-              >
-                <span
+          {(Object.keys(LAYER_LABELS) as TwinLayerId[])
+            .filter((layerId) => !module || !MODULE_DEFAULT_LAYERS[module] || MODULE_DEFAULT_LAYERS[module].includes(layerId))
+            .map((layerId) => {
+              const isActive = layers.includes(layerId);
+              return (
+                <button
+                  key={layerId}
+                  onClick={() => toggleLayer(layerId)}
                   className={cn(
-                    "h-2 w-2 rounded-full",
-                    isActive ? "bg-arena-primary animate-pulse" : "bg-arena-muted/40"
+                    "flex items-center space-x-2.5 px-2.5 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer",
+                    isActive
+                      ? "bg-arena-primary/10 border-arena-primary/20 text-white"
+                      : "bg-transparent border-transparent text-arena-muted hover:text-white hover:bg-white/5"
                   )}
-                />
-                <span>{LAYER_LABELS[layerId]}</span>
-              </button>
-            );
-          })}
+                >
+                  <span
+                    className={cn(
+                      "h-2 w-2 rounded-full",
+                      isActive ? "bg-arena-primary animate-pulse" : "bg-arena-muted/40"
+                    )}
+                  />
+                  <span>{LAYER_LABELS[layerId]}</span>
+                </button>
+              );
+            })}
         </div>
       </GlassCard>
     </div>

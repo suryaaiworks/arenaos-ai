@@ -4,7 +4,7 @@ import { NavItem } from "../../navigation/navigation.data";
 export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   collapsed?: boolean;
   setCollapsed?: (collapsed: boolean) => void;
-  activeHref?: string;
+
   items?: NavItem[];
   "data-testid"?: string;
 }

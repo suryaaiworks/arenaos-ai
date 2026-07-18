@@ -10,7 +10,18 @@ export type TwinLayerId =
   | "transit"
   | "concessions"
   | "utilities"
-  | "accessibility";
+  | "accessibility"
+  | "incidents"
+  | "agents"
+  | "memory"
+  | "tasks"
+  | "gateAlarms"
+  | "turnstiles"
+  | "powerGrid"
+  | "hvac"
+  | "maintenance"
+  | "cleaningZones"
+  | "equipment";
 
 export interface TwinSector {
   id: string;
@@ -23,14 +34,19 @@ export interface TwinSector {
 export interface TwinMarker {
   id: string;
   name: string;
-  type: "gate" | "sos" | "parking" | "security" | "medical" | "concession";
+  type: "gate" | "sos" | "parking" | "security" | "medical" | "concession" | "agent" | "gateAlarm" | "turnstile" | "powerGrid" | "hvac" | "maintenance" | "cleaningZone" | "equipment";
   status: "ok" | "alert" | "critical";
   x: number;
   y: number;
   label: string;
+  stats?: string;
+  prediction?: string;
+  opStatus?: string;
+  incidentHistory?: string;
 }
 
 export interface DigitalTwinProps extends React.HTMLAttributes<HTMLDivElement> {
   activeLayers?: TwinLayerId[];
+  module?: string;
   onSelectObject?: (details: SelectedObject) => void;
 }

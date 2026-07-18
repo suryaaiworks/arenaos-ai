@@ -6,6 +6,7 @@ import {
   RoleProvider,
   ScenarioProvider,
   LanguageProvider,
+  DashboardProvider,
 } from "@/features/app/providers";
 import AppShell from "@/features/app/layouts/AppShell";
 
@@ -26,9 +27,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <ModalProvider>
             <RoleProvider>
               <ScenarioProvider>
-                <CommandPaletteProvider>
-                  <AppShell>{children}</AppShell>
-                </CommandPaletteProvider>
+                <DashboardProvider>
+                  <CommandPaletteProvider>
+                    <AppShell>{children}</AppShell>
+                  </CommandPaletteProvider>
+                </DashboardProvider>
               </ScenarioProvider>
             </RoleProvider>
           </ModalProvider>
