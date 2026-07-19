@@ -142,14 +142,14 @@ export default function AppPage() {
             Console Metrics
           </span>
 
-          {role === "operations" && <OperationsDashboard />}
-          {role === "security" && <SecurityDashboard />}
-          {role === "medical" && <MedicalDashboard />}
-          {role === "transportation" && <TransportationDashboard />}
-          {role === "vendor" && <VendorDashboard />}
-          {role === "volunteer" && <VolunteerDashboard />}
-          {role === "executive" && <ExecutiveDashboard />}
-          {role === "administrator" && <AdminDashboard />}
+          {role === "operations" && <OperationsDashboard className="lg:grid-cols-1" />}
+          {role === "security" && <SecurityDashboard className="lg:grid-cols-1" />}
+          {role === "medical" && <MedicalDashboard className="lg:grid-cols-1" />}
+          {role === "transportation" && <TransportationDashboard className="lg:grid-cols-1" />}
+          {role === "vendor" && <VendorDashboard className="lg:grid-cols-1" />}
+          {role === "volunteer" && <VolunteerDashboard className="lg:grid-cols-1" />}
+          {role === "executive" && <ExecutiveDashboard className="lg:grid-cols-1" />}
+          {role === "administrator" && <AdminDashboard className="lg:grid-cols-1" />}
           
           {role === "fan" && (
             <div className="space-y-4">

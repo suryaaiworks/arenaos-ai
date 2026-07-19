@@ -35,7 +35,7 @@ export function AppShell({
       <Sidebar collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
 
       {/* Content wrapper panel */}
-      <div className="flex-grow h-full flex flex-col overflow-hidden relative z-10">
+      <div className="flex-grow min-w-0 h-full flex flex-col overflow-hidden relative z-10">
         {/* Upper Control Bar */}
         <Header />
         

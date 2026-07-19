@@ -4,14 +4,19 @@ import React from "react";
 import { useScenario } from "../../providers/ScenarioProvider";
 import { MetricCard } from "../MetricCard";
 import { StatusCard } from "../StatusCard";
+import { cn } from "@/lib/utils";
+
+interface DashboardProps {
+  className?: string;
+}
 
 /**
  * Operations Command Center Dashboard.
  */
-export function OperationsDashboard() {
+export function OperationsDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <MetricCard title="Turnstile Flow Rate" value="380/min" change="+40/min" changeType="increase" subtitle="Baseline scanner throughput" />
       <MetricCard title="Gate 3 Ingress Load" value={activeScenario === "gate_congestion" ? "96%" : "64%"} changeType="stable" subtitle="Turnstile capacity margins" />
       <StatusCard title="Facilities Operations" statusText="Optimal" statusType="success" details="Smart cleaning and equipment checklists online." />
@@ -23,10 +28,10 @@ export function OperationsDashboard() {
 /**
  * Security Command Center Dashboard.
  */
-export function SecurityDashboard() {
+export function SecurityDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <MetricCard title="Threat Level" value={activeScenario === "security_threat" ? "ELEVATED" : "LOW"} changeType="stable" subtitle="Perimeter grids secure" />
       <StatusCard title="VIP Gate Security" statusText={activeScenario === "security_threat" ? "BREACH ALERT" : "SECURED"} statusType={activeScenario === "security_threat" ? "error" : "success"} details="Officials/Players perimeter gate logs" />
       <StatusCard title="AI CCTV Scanners" statusText="124 Online" statusType="success" details="Facial recognition, 18 bag scanners, 34 metal detectors active" />
@@ -38,10 +43,10 @@ export function SecurityDashboard() {
 /**
  * Medical Command Center Dashboard.
  */
-export function MedicalDashboard() {
+export function MedicalDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <StatusCard title="SOS Requests" statusText={activeScenario === "medical_sos" ? "1 Active SOS" : "0 Active"} statusType={activeScenario === "medical_sos" ? "error" : "success"} details="Active spectator emergency triggers" />
       <MetricCard title="Avg Response Time" value={activeScenario === "medical_sos" ? "120s" : "2m 18s"} changeType="stable" subtitle="Clinics dispatch route optimized" />
       <StatusCard title="Medical Rooms" statusText="8 Clinics Standby" statusType="success" details="8 medical rooms, 24 AED stations active" />
@@ -53,10 +58,10 @@ export function MedicalDashboard() {
 /**
  * Transport Command Center Dashboard.
  */
-export function TransportationDashboard() {
+export function TransportationDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <MetricCard title="VIP Parking Occupancy" value={activeScenario === "parking_full" ? "98%" : "94%"} changeType="stable" subtitle="VIP Parking Lot" />
       <MetricCard title="Public Parking Occupancy" value={activeScenario === "parking_full" ? "99%" : "72%"} changeType="stable" subtitle="1378 slots remaining" />
       <StatusCard title="Metro Ingress Crowd" statusText={activeScenario === "metro_failure" ? "Signal Delay" : "Gate 2 Metro Influx High"} statusType={activeScenario === "metro_failure" ? "error" : "success"} details="Kolkata Metro station shuttle loops active" />
@@ -68,10 +73,10 @@ export function TransportationDashboard() {
 /**
  * Vendor Command Center Dashboard.
  */
-export function VendorDashboard() {
+export function VendorDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <StatusCard title="Average Concessions Wait" statusText={activeScenario === "stock_shortage" ? "6m wait" : "4m wait"} statusType={activeScenario === "stock_shortage" ? "warning" : "success"} details="Burger queue: 3m | Pizza: 5m | Coffee: 2m" />
       <MetricCard title="Concessions Stock" value={activeScenario === "stock_shortage" ? "15%" : "85%"} changeType="stable" subtitle="Inventory across food stands" />
       <StatusCard title="Orders Today" statusText="18,234 Orders" statusType="success" details="Point-of-sale transactions synced" />
@@ -83,9 +88,9 @@ export function VendorDashboard() {
 /**
  * Volunteer Command Center Dashboard.
  */
-export function VolunteerDashboard() {
+export function VolunteerDashboard({ className }: DashboardProps = {}) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <StatusCard title="Volunteer Tasks Queue" statusText="4 Active" statusType="neutral" details="Seat finder assistance dispatches" />
       <MetricCard title="Steward Coverage" value="98%" changeType="stable" subtitle="Steward check-in registers online" />
       <StatusCard title="PA Audio Broadcasts" statusText="Online" statusType="success" details="Dynamic stadium audio & signage sync" />
@@ -97,10 +102,10 @@ export function VolunteerDashboard() {
 /**
  * Executive Command Center Dashboard.
  */
-export function ExecutiveDashboard() {
+export function ExecutiveDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <MetricCard title="Venue Safety Health" value={activeScenario === "clear" ? "99.8%" : "94.2%"} changeType="stable" subtitle="Unified operations index" />
       <MetricCard title="Match Day Attendance" value="84,250" changeType="stable" subtitle="Salt Lake Stadium seating bowl" />
       <StatusCard title="AI Prediction confidence" statusText="98.2%" statusType="success" details="ArenaMind decision tree active" />
@@ -112,9 +117,9 @@ export function ExecutiveDashboard() {
 /**
  * Administration Center Dashboard.
  */
-export function AdminDashboard() {
+export function AdminDashboard({ className }: DashboardProps = {}) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <StatusCard title="User Permissions config" statusText="Audited" statusType="success" details="Role-Based access control logs" />
       <MetricCard title="Model parameters" value="14 Online" changeType="stable" subtitle="AI Agent parameters registry" />
       <StatusCard title="System configuration" statusText="Synchronized" statusType="success" details="Supabase database link status" />
@@ -126,7 +131,7 @@ export function AdminDashboard() {
 /**
  * AI Agents Registry Command Center Dashboard.
  */
-export function AIAgentsDashboard() {
+export function AIAgentsDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
   
   let healthValue = "99.8%";
@@ -151,7 +156,7 @@ export function AIAgentsDashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <MetricCard title="Registered AI Agents" value="38 Active" changeType="stable" subtitle="2 Busy / 0 Offline" />
       <StatusCard title="Avg Agent Health" statusText={healthValue} statusType={healthType} details="Heartbeat loops healthy" />
       <MetricCard title="Memory Pool" value={memoryValue} changeType="stable" subtitle="Unified memory space usage" />
@@ -163,7 +168,7 @@ export function AIAgentsDashboard() {
 /**
  * Gate Influx Command Center Dashboard.
  */
-export function GateInfluxDashboard() {
+export function GateInfluxDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
 
   let occupancyVal = "78%";
@@ -188,7 +193,7 @@ export function GateInfluxDashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <MetricCard title="Gate 3 Ingress Occupancy" value={occupancyVal} changeType="stable" subtitle="Gate 3 Main Public Entrance capacity" />
       <StatusCard title="Queue Waiting Time" statusText={queueVal} statusType={queueType} details="Average turnstile validation wait" />
       <StatusCard title="Security Scanners Status" statusText={scannersText} statusType={scannersType} details="Turnstiles validation & metal detectors" />
@@ -200,7 +205,7 @@ export function GateInfluxDashboard() {
 /**
  * Power & Utilities Command Center Dashboard.
  */
-export function PowerUtilitiesDashboard() {
+export function PowerUtilitiesDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
 
   let loadValue = "2.4 MW";
@@ -220,7 +225,7 @@ export function PowerUtilitiesDashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <MetricCard title="Power Grid Load" value={loadValue} changeType="stable" subtitle="Salt Lake Stadium grid loop usage" />
       <StatusCard title="UPS & Generators" statusText={genText} statusType={genType} details="Backup power generators & UPS check" />
       <StatusCard title="HVAC Stadium Cooling" statusText={hvacText} statusType={hvacType} details="Environmental temperature loops" />
@@ -232,7 +237,7 @@ export function PowerUtilitiesDashboard() {
 /**
  * Facility Maintenance Command Center Dashboard.
  */
-export function FacilityMaintenanceDashboard() {
+export function FacilityMaintenanceDashboard({ className }: DashboardProps = {}) {
   const { activeScenario } = useScenario();
 
   let maintValue = "8 Active";
@@ -254,7 +259,7 @@ export function FacilityMaintenanceDashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full">
+    <div className={cn("grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left w-full", className)}>
       <MetricCard title="Maintenance Requests" value={maintValue} changeType="stable" subtitle="Active work order queues status" />
       <MetricCard title="Cleaning Crew" value={cleaningText} changeType="stable" subtitle="Dynamic crew members allocation logs" />
       <StatusCard title="Light Fixture Status" statusText={fixturesText} statusType={fixturesType} details="608 High Intensity LEDs" />

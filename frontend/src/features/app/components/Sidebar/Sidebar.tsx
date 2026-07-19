@@ -202,7 +202,7 @@ export function Sidebar({
         "h-screen shrink-0 flex flex-col justify-between py-6 px-4 transition-all duration-300 relative z-30 select-none",
         // Theme-aware: --arena-sidebar-bg and --arena-sidebar-border respond to data-theme
         "bg-[var(--arena-sidebar-bg,#050816)] border-r border-[var(--arena-sidebar-border,rgba(255,255,255,0.06))]",
-        collapsed ? "w-20" : "w-64",
+        collapsed ? "w-20" : "w-[280px]",
         className
       )}
       data-testid={dataTestId}

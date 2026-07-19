@@ -151,7 +151,7 @@ export function DigitalTwin({
   };
 
   return (
-    <div className={cn("flex flex-col lg:flex-row gap-6 w-full items-start", className)} {...props}>
+    <div className={cn("flex flex-col xl:flex-row gap-6 w-full items-start", className)} {...props}>
       {/* Central Twin Canvas Frame */}
       <GlassCard
         padding="none"
@@ -285,7 +285,7 @@ export function DigitalTwin({
           }}
         >
           <div
-            className="relative w-[450px] h-[450px] flex items-center justify-center transition-all duration-300"
+            className="relative w-80 h-80 xl:w-[450px] xl:h-[450px] flex items-center justify-center transition-all duration-300"
             style={{
               transform: `rotateX(${pitch}deg) rotateY(0deg) rotateZ(${rotate}deg)`,
               transformStyle: "preserve-3d",
