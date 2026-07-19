@@ -121,3 +121,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Do not ignore frontend source libraries
+!frontend/src/lib/
+
